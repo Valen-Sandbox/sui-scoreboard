@@ -1,4 +1,4 @@
-This fork adds support for displaying [ULX Buildmode][https://steamcommunity.com/sharedfiles/filedetails/?id=1308900979] status and makes some small corrections to the rating descriptions.
+This fork adds support for displaying [ULX Buildmode][buildmode] status and makes some small corrections to the rating descriptions.
 
 [![ScreenShot](https://raw.githubusercontent.com/ZionDevelopers/sui-scoreboard/master/logo.jpg)][workshop]
 
@@ -34,6 +34,7 @@ Simply clone this repository into your `addons` folder:
 This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 To view a copy of this license, visit [Common Creative's Website][License].
 
+[buildmode]: <https://steamcommunity.com/sharedfiles/filedetails/?id=1308900979>
 [Garry's Mod]: <http://garrysmod.com/>
 [workshop]: <http://steamcommunity.com/sharedfiles/filedetails/?id=160121673>
 [Exsto]: <https://github.com/prefanatic/exsto>
