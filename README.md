@@ -1,3 +1,5 @@
+This fork adds support for displaying [ULX Buildmode][https://steamcommunity.com/sharedfiles/filedetails/?id=1308900979] status and makes some small corrections to the rating descriptions.
+
 [![ScreenShot](https://raw.githubusercontent.com/ZionDevelopers/sui-scoreboard/master/logo.jpg)][workshop]
 
 SUI Scoreboard V2.6 is a [Garry's Mod][] addon which is based on the original SUI Scoreboard v2 developed by suicidal.banana.
@@ -25,7 +27,7 @@ SUI Scoreboard is now available via the Steam Workshop! Go to [its Workshop page
 Simply clone this repository into your `addons` folder:
 
     cd "%programfiles(x86)%/Steam/SteamApps/common/GarrysMod/garrysmod/addons"
-    git clone https://github.com/ZionDevelopers/sui-scoreboard.git sui-scoreboard
+    git clone https://github.com/thecraftianman/sui-scoreboard.git sui-scoreboard
 
 ### License
 
