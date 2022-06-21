@@ -53,16 +53,16 @@ function PANEL:Init()
 
 
 	self.VoteButtons[10] = vgui.Create( "suispawnmenuvotebutton", self )
-	self.VoteButtons[10]:SetUp( "corner16", "curvey", "This player is great with curves" )
+	self.VoteButtons[10]:SetUp( "corner16", "curvey", "This player is great with curves!" )
 
 	self.VoteButtons[9] = vgui.Create( "suispawnmenuvotebutton", self )
-	self.VoteButtons[9]:SetUp( "faceposer_indicator", "best_landvehicle", "This player is awesome with land vehicles" )
+	self.VoteButtons[9]:SetUp( "faceposer_indicator", "best_landvehicle", "This player is awesome with land vehicles!" )
 
 	self.VoteButtons[8] = vgui.Create( "suispawnmenuvotebutton", self )
-	self.VoteButtons[8]:SetUp( "arrow", "best_airvehicle", "This player is awesome with air vehicles" )
+	self.VoteButtons[8]:SetUp( "arrow", "best_airvehicle", "This player is awesome with air vehicles!" )
 
 	self.VoteButtons[7] = vgui.Create( "suispawnmenuvotebutton", self )
-	self.VoteButtons[7]:SetUp( "inv_corner16", "stunter", "Wow! you can do amazing Stunts!" )
+	self.VoteButtons[7]:SetUp( "inv_corner16", "stunter", "Wow! You can do amazing stunts!" )
 
 	self.VoteButtons[6] = vgui.Create( "suispawnmenuvotebutton", self )
 	self.VoteButtons[6]:SetUp( "gmod_logo", "god", "You are my GOD!" )
