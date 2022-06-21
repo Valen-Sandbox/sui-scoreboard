@@ -85,6 +85,9 @@ function PANEL:Init()
 	
 	self.lblTeam = vgui.Create( "DLabel", self )
 	self.lblTeam:SetText( "Rank" )
+  
+  	self.lblStatus = vgui.Create( "DLabel", self )
+	self.lblStatus:SetText( "Status" )
 	
 	self.lblMute = vgui.Create( "DImageButton", self)
 	
@@ -233,6 +236,7 @@ function PANEL:PerformLayout()
 	self.lblHealth:SizeToContents()
 	self.lblHours:SizeToContents()
 	self.lblTeam:SizeToContents()
+  	self.lblStatus:SizeToContents()
 	
 	local COLUMN_SIZE = 45
 	
@@ -243,6 +247,7 @@ function PANEL:PerformLayout()
 	self.lblHealth:SetPos( self:GetWide() - COLUMN_SIZE*6.4 - self.lblKills:GetWide()/2, self.PlayerFrame.y - self.lblPing:GetTall() - 3  )
 	self.lblHours:SetPos( self:GetWide() - COLUMN_SIZE*10.2 - self.lblKills:GetWide()/2, self.PlayerFrame.y - self.lblPing:GetTall() - 3  )
 	self.lblTeam:SetPos( self:GetWide() - COLUMN_SIZE*13.1 - self.lblKills:GetWide()/2, self.PlayerFrame.y - self.lblPing:GetTall() - 3  )
+  	self.lblStatus:SetPos( self:GetWide() - COLUMN_SIZE*16 - self.lblKills:GetWide()/2, self.PlayerFrame.y - self.lblPing:GetTall() - 3  )
 end
 
 --- ApplySchemeSettings
@@ -271,6 +276,7 @@ function PANEL:ApplySchemeSettings()
 	self.lblHealth:SetFont( "DefaultSmall" )
 	self.lblRatio:SetFont( "DefaultSmall" )
 	self.lblHours:SetFont( "DefaultSmall" )
+  	self.lblStatus:SetFont( "DefaultSmall" )
 	
 	self.lblPing:SetColor( Color( 0, 0, 0, 255 ) )
 	self.lblKills:SetColor( Color( 0, 0, 0, 255 ) )
@@ -279,6 +285,7 @@ function PANEL:ApplySchemeSettings()
 	self.lblHealth:SetColor( Color( 0, 0, 0, 255 ) )
 	self.lblRatio:SetColor( Color( 0, 0, 0, 255 ) )
 	self.lblHours:SetColor( Color( 0, 0, 0, 255 ) )
+  	self.lblStatus:SetColor( Color( 0, 0, 0, 255 ) )
 	
 	self.lblPing:SetFGColor( Color( 0, 0, 0, 255 ) )
 	self.lblKills:SetFGColor( Color( 0, 0, 0, 255 ) )
@@ -287,6 +294,7 @@ function PANEL:ApplySchemeSettings()
 	self.lblHealth:SetFGColor( Color( 0, 0, 0, 255 ) )
 	self.lblRatio:SetFGColor( Color( 0, 0, 0, 255 ) )
 	self.lblHours:SetFGColor( Color( 0, 0, 0, 255 ) )
+  	self.lblStatus:SetFGColor( Color( 0, 0, 0, 255 ) )
 end
 
 --- UpdateScoreboard

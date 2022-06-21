@@ -62,6 +62,7 @@ function PANEL:UpdatePlayerData()
 	self.lblFrags:SetText( "" )
 	self.lblDeaths:SetText( "" )
 	self.lblPing:SetText( "" )
+  	self.lblStatus:SetText( "" )
 	
 	self.lblMute:SetImage( "icon32/unmuted.png" )
 
@@ -82,6 +83,7 @@ function PANEL:Init()
 	self.lblDeaths = vgui.Create( "DLabel", self )
 	self.lblRatio = vgui.Create( "DLabel", self )
 	self.lblPing = vgui.Create( "DLabel", self )
+  	self.lblStatus = vgui.Create( "DLabel", self )
 	self.lblMute = vgui.Create( "DImageButton", self)
 	self.imgAvatar = vgui.Create("AvatarImage", self)
 	self.lblAvatarFix = vgui.Create( "DLabel", self )
@@ -101,6 +103,7 @@ function PANEL:Init()
 	self.imgAvatar:SetMouseInputEnabled( false )
 	self.lblMute:SetMouseInputEnabled( true )
 	self.lblAvatarFix:SetMouseInputEnabled( true )
+  	self.lblStatus:SetMouseInputEnabled( false )
 end
 
 --- ApplySchemeSettings
@@ -114,7 +117,8 @@ function PANEL:ApplySchemeSettings()
 	self.lblRatio:SetFont( "suiscoreboardplayername"  )
 	self.lblPing:SetFont( "suiscoreboardplayername"  )
 	self.lblAvatarFix:SetFont( "suiscoreboardplayername"  ) 
-	
+	self.lblStatus:SetFont( "suiscoreboardplayername"  )
+  
 	local namecolor = Color(0,0,0,255)
 	
 	self.lblName:SetColor( namecolor )
@@ -126,7 +130,8 @@ function PANEL:ApplySchemeSettings()
 	self.lblRatio:SetColor( namecolor )
 	self.lblPing:SetColor( namecolor)
 	self.lblAvatarFix:SetColor( namecolor)
-	
+	self.lblStatus:SetColor( namecolor )
+  
 	self.lblName:SetFGColor( Color( 0, 0, 0, 255 ) )
 	self.lblTeam:SetFGColor( Color( 0, 0, 0, 255 ) )
 	self.lblHours:SetFGColor( Color( 0, 0, 0, 255 ) )
@@ -135,6 +140,7 @@ function PANEL:ApplySchemeSettings()
 	self.lblDeaths:SetFGColor( Color( 0, 0, 0, 255 ) )
 	self.lblRatio:SetFGColor( Color( 0, 0, 0, 255 ) )
 	self.lblPing:SetFGColor( Color( 0, 0, 0, 255 ) )
+  	self.lblStatus:SetFGColor( Color( 0, 0, 0, 255 ) )
 	self.lblAvatarFix:SetFGColor( Color( 0, 0, 0, 0 ) )
 end
 
@@ -199,6 +205,7 @@ function PANEL:PerformLayout()
 	self.lblHealth:SetPos( self:GetWide() - COLUMN_SIZE * 6.4, 0 )
 	self.lblHours:SetPos( self:GetWide() - COLUMN_SIZE * 10.3, 0 )
 	self.lblTeam:SetPos( self:GetWide() - COLUMN_SIZE * 13.2, 3 )
+  	self.lblStatus:SetPos( self:GetWide() - COLUMN_SIZE * 16, 3 )
 	
 	if self.Open or self.Size ~= self.TargetSize then	
 		self.infoCard:SetVisible( true )
