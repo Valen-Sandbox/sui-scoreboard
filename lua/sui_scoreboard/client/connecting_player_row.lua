@@ -55,14 +55,14 @@ end
 --- UpdatePlayerData
 function PANEL:UpdatePlayerData()
 	self.lblName:SetText( self.PlayerName )
-	self.lblTeam:SetText( "Connecting" )
+	self.lblStatus:SetText( "Connecting" )
 
 	self.lblHours:SetText( "" )
 	self.lblHealth:SetText( "" )
 	self.lblFrags:SetText( "" )
 	self.lblDeaths:SetText( "" )
 	self.lblPing:SetText( "" )
-  	self.lblStatus:SetText( "" )
+  	self.lblTeam:SetText( "" )
 	
 	self.lblMute:SetImage( "icon32/unmuted.png" )
 
