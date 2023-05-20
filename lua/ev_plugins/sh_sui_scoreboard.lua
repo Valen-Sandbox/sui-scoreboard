@@ -21,7 +21,7 @@ PLUGIN.Title = "SUI Scoreboard v2.6 for Evolve"
 PLUGIN.Description = "SUI Scoreboard v2.6 ported for Evolve!"
 PLUGIN.Author = ".Z. Nexus"
 
-function PLUGIN:ScoreboardShow()  
+function PLUGIN:ScoreboardShow()
   return Scoreboard.Show()
 end
 

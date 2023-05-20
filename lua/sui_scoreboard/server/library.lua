@@ -24,9 +24,9 @@ Scoreboard.SendColor = function (ply)
   elseif maestro then
     tColor = maestro.rankcolor(maestro.userrank(ply)) or team.GetColor(ply:Team())
   else
-    tColor = team.GetColor( ply:Team())   
+    tColor = team.GetColor( ply:Team())
   end
-  
+
   net.Start("SUIScoreboardPlayerColor")
   net.WriteTable(tColor)
   net.Send(ply)

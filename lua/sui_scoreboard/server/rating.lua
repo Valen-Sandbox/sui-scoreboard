@@ -20,7 +20,7 @@ Version 2.6.3 - 2021-07-01 06:14 PM(UTC -03:00)
 if not sql.TableExists("sui_ratings") then
 	sql.Query( "CREATE TABLE IF NOT EXISTS sui_ratings ( id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, target INTEGER, rater INTEGER, rating INTEGER );" )
 	sql.Query( "CREATE INDEX IDX_RATINGS_TARGET ON sui_ratings ( target DESC )" )
-	Msg("SQL: Created ratings table!\n")	
+	Msg("SQL: Created ratings table!\n")
 end
 
 --- ValidRatings - only these ratings are valid!
@@ -31,11 +31,11 @@ local ValidRatings = { "naughty", "smile", "love", "artistic", "gold_star", "bui
 -- @return mixed
 local function GetRatingID( name )
 	for k, v in pairs( ValidRatings ) do
-		if name == v then 
-			return k 
+		if name == v then
+			return k
 		end
 	end
-	
+
 	return false
 end
 
@@ -48,7 +48,7 @@ local function GetRatingName( id )
 			return v
 		end
 	end
-	
+
 	return false
 end
 
@@ -59,18 +59,18 @@ Scoreboard.UpdatePlayerRatings = function( ply )
 	if not IsValid( ply ) then
 		return false
 	end
-	
+
 	local result = sql.Query( "SELECT rating, count(*) as cnt FROM sui_ratings WHERE target = "..ply:UniqueID().." GROUP BY rating " )
-	
+
 	if not result then
 		return false
 	end
-	
-	for id, row in pairs( result ) do	
-		ply:SetNetworkedInt( "SuiRating."..ValidRatings[ tonumber( row['rating'] ) ], row['cnt'] )	
+
+	for id, row in pairs( result ) do
+		ply:SetNetworkedInt( "SuiRating."..ValidRatings[ tonumber( row['rating'] ) ], row['cnt'] )
 	end
 end
-	
+
 --- CCRateUser
 -- @param string player
 -- @param string command
@@ -80,51 +80,51 @@ local function CCRateUser( player, command, arguments )
 	local Rater 	= player
 	local Target 	= Entity( tonumber( arguments[1] ) )
 	local Rating	= arguments[2]
-	
+
 	if (not IsValid( Rater )) or (not IsValid( Target )) then
 		return false
 	end
-	
+
 	-- Don't rate non players
-	if not Target:IsPlayer() then 
+	if not Target:IsPlayer() then
 		return false
 	end
-	
+
 	-- Don't rate self
-	if Rater == Target then 
+	if Rater == Target then
 		return false
 	 end
-	
+
 	local RatingID = GetRatingID( Rating )
 	local RaterID = Rater:UniqueID()
 	local TargetID = Target:UniqueID()
-	
+
 	-- Rating isn't valid
 	if not RatingID then
 		return false
 	end
-	
+
 	-- When was the last time this player rated this player
 	-- Only let them rate each other every 60 seconds
 	Target.RatingTimers = Target.RatingTimers or {}
-	
-	if Target.RatingTimers[ RaterID ] and Target.RatingTimers[ RaterID ] > CurTime() - 60 then	
+
+	if Target.RatingTimers[ RaterID ] and Target.RatingTimers[ RaterID ] > CurTime() - 60 then
 		Rater:ChatPrint( "Please wait before rating ".. Target:Nick() .." again.\n" );
-		return false		
+		return false
 	end
-	
+
 	Target.RatingTimers[ RaterID ] = CurTime()
-	
+
 	-- Tell the target that they have been rated (but don't tell them who to add to the fun and bitching)
 	Target:ChatPrint( Rater:Nick() .. " Gave you a '" .. GetRatingName(RatingID) .. "' rating.\n" );
-		
+
 	-- Let the rater know that their vote was counted
 	Rater:ChatPrint( "Gave ".. Target:Nick() .." a '" .. GetRatingName(RatingID) .. "' rating.\n" );
-	
+
 	sql.Query( "INSERT INTO sui_ratings ( target, rater, rating ) VALUES ( "..TargetID..", "..RaterID..", "..RatingID.." )" )
 
 	-- We changed something so update the networked vars
-	Scoreboard.UpdatePlayerRatings ( Target )	
+	Scoreboard.UpdatePlayerRatings ( Target )
 end
 
 concommand.Add( "sui_rateuser", CCRateUser )

@@ -118,7 +118,7 @@ function PANEL:UpdatePlayerData()
 	self.lblFrags:SetText( self.Player:Frags() )
 	self.lblDeaths:SetText( self.Player:Deaths() )
 	self.lblPing:SetText( self.Player:Ping() )
-  	
+
   	-- Change build/pvp status
   	local buildStatus = "Unknown"
   	if self.Player:GetNWBool( "_Kyle_Buildmode" ) == true then
@@ -138,8 +138,8 @@ function PANEL:UpdatePlayerData()
 		end
 
 		self.lblMute.DoClick = function() self.Player:SetMuted( not self.Muted ) end
-	end	
-	
+	end
+
 	-- Show the super awesome port of the vanilla gmod volume slider when right click
 	self.lblMute.DoRightClick = function()
 		if IsValid(ply) and ply ~= LocalPlayer() then
@@ -433,9 +433,9 @@ function PANEL:HigherOrLower( row )
 	if self.Player:Team() == TEAM_CONNECTING then
 		return false
 	end
-	
+
 	if not row.Player then --then its a connecting_player_row.lua
-		return true 
+		return true
 	end
 
 	if self.Player:Team() ~= row.Player:Team() then

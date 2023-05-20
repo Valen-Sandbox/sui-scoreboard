@@ -22,10 +22,10 @@ Scoreboard = {}
 if SERVER then
   -- For Players to Download this addon from Workshop.
   resource.AddWorkshop("160121673")
-  
+
   -- Add to the pool
   util.AddNetworkString("SUIScoreboardPlayerColor")
-  
+
   -- Send required files to client
   AddCSLuaFile()
   AddCSLuaFile("sui_scoreboard/client/scoreboard.lua")

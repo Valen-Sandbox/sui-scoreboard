@@ -19,17 +19,17 @@ Version 2.6.3 - 2021-07-01 06:14 PM(UTC -03:00)
 local PLUGIN = exsto.CreatePlugin()
 
 PLUGIN:SetInfo({
-	Name = "SUI Scoreboard v2.6 for Exsto",
-	ID = "sui-scoreboard-v2-6",
-	Desc = "SUI Scoreboard v2.6 ported for Exsto!",
-	Owner = ".Z. Nexus"
+  Name = "SUI Scoreboard v2.6 for Exsto",
+  ID = "sui-scoreboard-v2-6",
+  Desc = "SUI Scoreboard v2.6 ported for Exsto!",
+  Owner = ".Z. Nexus"
 })
 
-function PLUGIN:Init()	
-  function PLUGIN:ScoreboardShow()	
+function PLUGIN:Init()
+  function PLUGIN:ScoreboardShow()
     return Scoreboard.Show()
   end
-  
+
   function PLUGIN:ScoreboardHide()
     return Scoreboard.Hide()
   end

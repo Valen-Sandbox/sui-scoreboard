@@ -25,21 +25,21 @@ function PANEL:Paint(w,h)
 
 	local color = Color( 100, 100, 100, 155 )
 
-	if self.Open or self.Size ~= self.TargetSize then	
+	if self.Open or self.Size ~= self.TargetSize then
 		draw.RoundedBox( 4, 18, 16, self:GetWide()-36, self:GetTall() - 16, color )
 		draw.RoundedBox( 4, 20, 16, self:GetWide()-40, self:GetTall() - 16 - 2, Color( 225, 225, 225, 150 ) )
-		
+
 		surface.SetTexture( texGradient )
 		surface.SetDrawColor( 255, 255, 255, 100 )
-		surface.DrawTexturedRect( 20, 16, self:GetWide()-40, self:GetTall() - 16 - 2 ) 	
+		surface.DrawTexturedRect( 20, 16, self:GetWide()-40, self:GetTall() - 16 - 2 )
 	end
-	
+
 	draw.RoundedBox( 4, 18, 0, self:GetWide()-36, 38, color )
-	
+
 	surface.SetTexture( texGradient )
 	surface.SetDrawColor( 255, 255, 255, 150 )
-	surface.DrawTexturedRect( 0, 0, self:GetWide()-36, 38 ) 
-		
+	surface.DrawTexturedRect( 0, 0, self:GetWide()-36, 38 )
+
 	return true
 end
 
@@ -48,7 +48,7 @@ function PANEL:SetPlayer( plyName, playerId, playerId64 )
 	self.PlayerName = plyName
 	self.PlayerId = playerId
 	self.PlayerId64 = playerId64
-	self:UpdatePlayerData()	
+	self:UpdatePlayerData()
 	--self.imgAvatar:SetPlayer( playerId )
 end
 
@@ -63,7 +63,7 @@ function PANEL:UpdatePlayerData()
 	self.lblDeaths:SetText( "" )
 	self.lblPing:SetText( "" )
   	self.lblTeam:SetText( "" )
-	
+
 	self.lblMute:SetImage( "icon32/unmuted.png" )
 
     self.lblRatio:SetText( "" )
@@ -72,9 +72,9 @@ end
 --- Int
 function PANEL:Init()
 	self.Size = 154--38
-	self:OpenInfo( false )	
+	self:OpenInfo( false )
 	self.infoCard	= vgui.Create( "suiscoreplayerinfocard", self )
-	
+
 	self.lblName = vgui.Create( "DLabel", self )
 	self.lblTeam = vgui.Create( "DLabel", self )
 	self.lblHours = vgui.Create( "DLabel", self )
@@ -90,7 +90,7 @@ function PANEL:Init()
 	self.lblAvatarFix:SetText("")
 	self.lblAvatarFix:SetCursor( "hand" )
 	self.lblAvatarFix.DoClick = function  () gui.OpenURL("https://steamcommunity.com/profiles/" .. self.PlayerId64) end
-	
+
 	-- If you don't do this it'll block your clicks
 	self.lblName:SetMouseInputEnabled( false )
 	self.lblTeam:SetMouseInputEnabled( false )
@@ -116,11 +116,11 @@ function PANEL:ApplySchemeSettings()
 	self.lblDeaths:SetFont( "suiscoreboardplayername"  )
 	self.lblRatio:SetFont( "suiscoreboardplayername"  )
 	self.lblPing:SetFont( "suiscoreboardplayername"  )
-	self.lblAvatarFix:SetFont( "suiscoreboardplayername"  ) 
+	self.lblAvatarFix:SetFont( "suiscoreboardplayername"  )
 	self.lblStatus:SetFont( "suiscoreboardplayername"  )
-  
+
 	local namecolor = Color(0,0,0,255)
-	
+
 	self.lblName:SetColor( namecolor )
 	self.lblTeam:SetColor( namecolor )
 	self.lblHours:SetColor( namecolor )
@@ -131,7 +131,7 @@ function PANEL:ApplySchemeSettings()
 	self.lblPing:SetColor( namecolor)
 	self.lblAvatarFix:SetColor( namecolor)
 	self.lblStatus:SetColor( namecolor )
-  
+
 	self.lblName:SetFGColor( Color( 0, 0, 0, 255 ) )
 	self.lblTeam:SetFGColor( Color( 0, 0, 0, 255 ) )
 	self.lblHours:SetFGColor( Color( 0, 0, 0, 255 ) )
@@ -162,42 +162,42 @@ function PANEL:OpenInfo( bool )
 	else
 		self.TargetSize = 38
 	end
-	
+
 	self.Open = bool
 end
 
 --- Think
 function PANEL:Think()
-	if self.Size ~= self.TargetSize then	
+	if self.Size ~= self.TargetSize then
 		self.Size = self.TargetSize
 		self:PerformLayout()
 		Scoreboard.vgui:InvalidateLayout()
 	end
-	
-	if not self.PlayerUpdate or self.PlayerUpdate < CurTime() then	
+
+	if not self.PlayerUpdate or self.PlayerUpdate < CurTime() then
 		self.PlayerUpdate = CurTime() + 0.5
-		self:UpdatePlayerData()		
+		self:UpdatePlayerData()
 	end
 end
 
 --- PerformLayout
 function PANEL:PerformLayout()
-	self:SetSize( self:GetWide(), self.Size ) 
-	
+	self:SetSize( self:GetWide(), self.Size )
+
 	self.lblName:SizeToContents()
 	self.lblName:SetPos( 60, 3 )
-	self.lblTeam:SizeToContents()	
+	self.lblTeam:SizeToContents()
 	self.lblMute:SetSize(32,32)
 	self.lblHours:SizeToContents()
 	self.lblStatus:SizeToContents()
-	
-	self.imgAvatar:SetPos( 21, 4 ) 
+
+	self.imgAvatar:SetPos( 21, 4 )
  	self.imgAvatar:SetSize( 32, 32 )
- 	self.lblAvatarFix:SetPos( 21, 4 ) 
+ 	self.lblAvatarFix:SetPos( 21, 4 )
  	self.lblAvatarFix:SetSize( 32, 32 )
 
 	local COLUMN_SIZE = 45
-	
+
 	self.lblMute:SetPos( self:GetWide() - COLUMN_SIZE - 8, 0 )
 	self.lblPing:SetPos( self:GetWide() - COLUMN_SIZE * 2, 0 )
 	self.lblRatio:SetPos( self:GetWide() - COLUMN_SIZE * 3.4, 0 )
@@ -207,13 +207,13 @@ function PANEL:PerformLayout()
 	self.lblHours:SetPos( self:GetWide() - COLUMN_SIZE * 10.3, 0 )
 	self.lblTeam:SetPos( self:GetWide() - COLUMN_SIZE * 13.2, 3 )
   	self.lblStatus:SetPos( self:GetWide() - COLUMN_SIZE * 16, 3 )
-	
-	if self.Open or self.Size ~= self.TargetSize then	
+
+	if self.Open or self.Size ~= self.TargetSize then
 		self.infoCard:SetVisible( true )
 		self.infoCard:SetPos( 18, self.lblName:GetTall() + 27 )
-		self.infoCard:SetSize( self:GetWide() - 36, self:GetTall() - self.lblName:GetTall() + 5 )	
-	else	
-		self.infoCard:SetVisible( false )	
+		self.infoCard:SetSize( self:GetWide() - 36, self:GetTall() - self.lblName:GetTall() + 5 )
+	else
+		self.infoCard:SetVisible( false )
 	end
 end
 
