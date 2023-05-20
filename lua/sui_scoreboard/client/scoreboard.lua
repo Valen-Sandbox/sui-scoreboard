@@ -20,13 +20,22 @@ include( "player_row.lua" )
 include( "connecting_player_row.lua" )
 include( "player_frame.lua" )
 
-surface.CreateFont( "suiscoreboardheader"  , { font = "coolvetica", size = 28, weight = 100, antialiasing = true})
-surface.CreateFont( "suiscoreboardsubtitle", { font = "coolvetica", size = 20, weight = 100, antialiasing = true})
+local CurTime = CurTime
+
+surface.CreateFont( "suiscoreboardheader"  , { font = "consolas", size = 28, weight = 1000, antialiasing = true})
+surface.CreateFont( "suiscoreboardsubtitle", { font = "consolas", size = 20, weight = 1000, antialiasing = true})
 surface.CreateFont( "suiscoreboardlogotext", { font = "coolvetica", size = 75, weight = 100, antialiasing = true})
-surface.CreateFont( "suiscoreboardsuisctext", { font = "verdana", size = 12, weight = 100, antialiasing = true})
-surface.CreateFont( "suiscoreboardplayername", { font = "verdana", size = 16, weight = 5, antialiasing = true})
+surface.CreateFont( "suiscoreboardsuisctext", { font = "bahnschrift", size = 12, weight = 100, antialiasing = true})
+surface.CreateFont( "suiscoreboardplayername", { font = "bahnschrift", size = 17, weight = 5, antialiasing = true})
+surface.CreateFont( "suiscoreboardsuiscinfo", { font = "bahnschrift", size = 13, weight = 50, antialiasing = true})
 
 local texGradient = surface.GetTextureID( "gui/center_gradient" )
+
+local outerBoxColor = Color( 14, 18, 25, 205 )
+local innerBoxColor = Color( 23, 25, 36, 100 )
+local subHeaderColor = Color( 14, 18, 25, 155 )
+local sectionLabelColor = Color( 255, 255, 227, 255 )
+local infoLabelColor = Color( 0, 0, 0, 255 )
 
 local function ColorCmp( c1, c2 )
 	if not c1 or not c2 then 
@@ -50,11 +59,11 @@ function PANEL:Init()
 	self.SuiSc = vgui.Create( "DLabel", self )
 	self.SuiSc:SetText( "SUI Scoreboard v2.6 by .Z. Nexus" )
 	self.SuiSc:SetCursor( "hand" )
-	self.SuiSc.DoClick = function  () gui.OpenURL("http://steamcommunity.com/profiles/76561197983103320") end
+	self.SuiSc.DoClick = function() gui.OpenURL("https://steamcommunity.com/profiles/76561197983103320") end
 	self.SuiSc:SetMouseInputEnabled( true )
 	
 	self.Description = vgui.Create( "DLabel", self )
-	self.Description:SetText( GAMEMODE.Name .. " - " .. GAMEMODE.Author )
+	--self.Description:SetText( GAMEMODE.Name .. " - " .. GAMEMODE.Author )
 	
 	self.PlayerFrame = vgui.Create( "suiplayerframe", self )
 	
@@ -64,7 +73,7 @@ function PANEL:Init()
 	
 	-- Update the scoreboard every 1 second
 	timer.Create( "Scoreboard.vguiUpdater", 1, 0, self.UpdateScoreboard )
-	
+
 	self.lblPing = vgui.Create( "DLabel", self )
 	self.lblPing:SetText( "Ping" )
 	
@@ -106,10 +115,10 @@ function PANEL:Init()
 	gameevent.Listen( "player_disconnect" )
 	hook.Add( "player_disconnect", "suiscoreboardPlayerDisconnect", function( data )
 		local name = data.name			-- Same as Player:Nick()
-		local steamid = data.networkid		// Same as Player:SteamID()
-		local id = data.userid			// Same as Player:UserID()
-		local bot = data.bot			// Same as Player:IsBot()
-		local reason = data.reason		// Text reason for disconnected such as "Kicked by console!", "Timed out!", etc...
+		local steamid = data.networkid		-- Same as Player:SteamID()
+		local id = data.userid			-- Same as Player:UserID()
+		local bot = data.bot			-- Same as Player:IsBot()
+		local reason = data.reason		-- Text reason for disconnected such as "Kicked by console!", "Timed out!", etc...
 
 		self.connectingPlayers[id] = nil
 		--print("player " .. name .. " disconnected, removing from list. List now has " .. #self.connectingPlayers .. " stuff")
@@ -117,7 +126,7 @@ function PANEL:Init()
 
 	gameevent.Listen( "player_spawn" )
 	hook.Add( "player_spawn", "suiscoreboardPlayerSpawn", function( data ) 
-		local id = data.userid	// Same as Player:UserID()
+		local id = data.userid	-- Same as Player:UserID()
 
 		self.connectingPlayers[id] = nil
 		--print("player " .. id .. " spawned, adding to list. List now has " .. #self.connectingPlayers .. " stuff")
@@ -144,21 +153,21 @@ end
 
 --- Paint
 function PANEL:Paint(w,h)
-	draw.RoundedBox( 10, 0, 0, self:GetWide(), self:GetTall(), Color( 50, 50, 50, 205 ) )
+	draw.RoundedBox( 10, 0, 0, self:GetWide(), self:GetTall(), outerBoxColor )
 	surface.SetTexture( texGradient )
-	surface.SetDrawColor( 100, 100, 100, 155 )
+	surface.SetDrawColor( 64, 68, 75, 155 )
 	surface.DrawTexturedRect( 0, 0, self:GetWide(), self:GetTall() ) 
 	
 	-- White Inner Box
-	draw.RoundedBox( 6, 15, self.Description.y - 8, self:GetWide() - 30, self:GetTall() - self.Description.y - 6, Color( 230, 230, 230, 100 ) )
+	draw.RoundedBox( 6, 15, self.Description.y - 8, self:GetWide() - 30, self:GetTall() - self.Description.y - 6, innerBoxColor )
 	surface.SetTexture( texGradient )
-	surface.SetDrawColor( 255, 255, 255, 50 )
+	surface.SetDrawColor( 48, 50, 61, 50 )
 	surface.DrawTexturedRect( 15, self.Description.y - 8, self:GetWide() - 30, self:GetTall() - self.Description.y - 8 )
 	
 	-- Sub Header
-	draw.RoundedBox( 6, 108, self.Description.y - 4, self:GetWide() - 128, self.Description:GetTall() + 8, Color( 100, 100, 100, 155 ) )
+	draw.RoundedBox( 6, 108, self.Description.y - 4, self:GetWide() - 128, self.Description:GetTall() + 8, subHeaderColor )
 	surface.SetTexture( texGradient )
-	surface.SetDrawColor( 255, 255, 255, 50 )
+	surface.SetDrawColor( 64, 68, 75, 50 )
 	surface.DrawTexturedRect( 108, self.Description.y - 4, self:GetWide() - 128, self.Description:GetTall() + 8 ) 
 	
   -- Logo!
@@ -195,16 +204,14 @@ function PANEL:PerformLayout()
 	self.Hostname:SizeToContents()
 	self.Hostname:SetPos( 115, 17 )
 	
-  self.Logog:SetSize( 80, 80 )
-  self.Logog:SetPos( 45, 5 )
-  self.Logog:SetColor( Color(30, 30, 30, 255) )
+	self.Logog:SetSize( 80, 80 )
+	self.Logog:SetPos( 45, 5 )
 
-  self.SuiSc:SetSize( 200, 15 )
-  self.SuiSc:SetPos( (self:GetWide() - 200), (self:GetTall() - 15) )  
+	self.SuiSc:SetSize( 200, 15 )
+	self.SuiSc:SetPos( (self:GetWide() - 200), (self:GetTall() - 15) )  
 	
 	self.Description:SizeToContents()
 	self.Description:SetPos( 115, 60 )
-	self.Description:SetColor( Color(30, 30, 30, 255) )
 	
 	self.PlayerFrame:SetPos( 5, self.Description.y + self.Description:GetTall() + 20 )
 	self.PlayerFrame:SetSize( self:GetWide() - 10, self:GetTall() - self.PlayerFrame.y - 20 )
@@ -213,13 +220,13 @@ function PANEL:PerformLayout()
 	
 	local PlayerSorted = {}
 	
-	for k, v in pairs( self.PlayerRows ) do	
+	for _, v in pairs( self.PlayerRows ) do	
 		table.insert( PlayerSorted, v )		
 	end
 	
-	table.sort( PlayerSorted, function ( a , b) return a:HigherOrLower( b ) end )
+	table.sort( PlayerSorted, function ( a, b ) return a:HigherOrLower( b ) end )
 	
-	for k, v in ipairs( PlayerSorted ) do	
+	for _, v in ipairs( PlayerSorted ) do	
 		v:SetPos( 0, y )	
 		v:SetSize( self.PlayerFrame:GetWide(), v:GetTall() )
 		
@@ -227,7 +234,8 @@ function PANEL:PerformLayout()
 		y = y + v:GetTall() + 1	
 	end
 	
-	self.Hostname:SetText( GetGlobalString( "ServerName","Garry's Mod 13" ) )
+	-- self.Hostname:SetText( GetGlobalString( "ServerName","Garry's Mod 13" ) )
+	self.Hostname:SetText( GetHostName() )
 	
 	self.lblPing:SizeToContents()
 	self.lblKills:SizeToContents()
@@ -264,68 +272,75 @@ function PANEL:ApplySchemeSettings()
   end
 	
 	self.Hostname:SetFGColor( Color( tColor.r, tColor.g, tColor.b, 255 ) )
-	self.Description:SetFGColor( Color( 55, 55, 55, 255 ) )
+	self.Description:SetFGColor( sectionLabelColor )
 
 	self.Logog:SetFGColor( Color(tColor.r,tColor.g,tColor.b,225)   )
-	self.SuiSc:SetFGColor( Color( 200, 200, 200, 200 ) )
+	self.SuiSc:SetFGColor( Color( 255, 255, 227, 200 ) )
 	
-	self.lblPing:SetFont( "DefaultSmall" )
-	self.lblKills:SetFont( "DefaultSmall" )
-	self.lblDeaths:SetFont( "DefaultSmall" )
-	self.lblTeam:SetFont( "DefaultSmall" )
-	self.lblHealth:SetFont( "DefaultSmall" )
-	self.lblRatio:SetFont( "DefaultSmall" )
-	self.lblHours:SetFont( "DefaultSmall" )
-  	self.lblStatus:SetFont( "DefaultSmall" )
+	self.lblPing:SetFont( "suiscoreboardsuiscinfo" )
+	self.lblKills:SetFont( "suiscoreboardsuiscinfo" )
+	self.lblDeaths:SetFont( "suiscoreboardsuiscinfo" )
+	self.lblTeam:SetFont( "suiscoreboardsuiscinfo" )
+	self.lblHealth:SetFont( "suiscoreboardsuiscinfo" )
+	self.lblRatio:SetFont( "suiscoreboardsuiscinfo" )
+	self.lblHours:SetFont( "suiscoreboardsuiscinfo" )
+  	self.lblStatus:SetFont( "suiscoreboardsuiscinfo" )
 	
-	self.lblPing:SetColor( Color( 0, 0, 0, 255 ) )
-	self.lblKills:SetColor( Color( 0, 0, 0, 255 ) )
-	self.lblDeaths:SetColor( Color( 0, 0, 0, 255 ) )
-	self.lblTeam:SetColor( Color( 0, 0, 0, 255 ) )
-	self.lblHealth:SetColor( Color( 0, 0, 0, 255 ) )
-	self.lblRatio:SetColor( Color( 0, 0, 0, 255 ) )
-	self.lblHours:SetColor( Color( 0, 0, 0, 255 ) )
-  	self.lblStatus:SetColor( Color( 0, 0, 0, 255 ) )
+	self.lblPing:SetColor( sectionLabelColor )
+	self.lblKills:SetColor( sectionLabelColor )
+	self.lblDeaths:SetColor( sectionLabelColor )
+	self.lblTeam:SetColor( sectionLabelColor )
+	self.lblHealth:SetColor( sectionLabelColor )
+	self.lblRatio:SetColor( sectionLabelColor )
+	self.lblHours:SetColor( sectionLabelColor )
+  	self.lblStatus:SetColor( sectionLabelColor )
 	
-	self.lblPing:SetFGColor( Color( 0, 0, 0, 255 ) )
-	self.lblKills:SetFGColor( Color( 0, 0, 0, 255 ) )
-	self.lblDeaths:SetFGColor( Color( 0, 0, 0, 255 ) )
-	self.lblTeam:SetFGColor( Color( 0, 0, 0, 255 ) )
-	self.lblHealth:SetFGColor( Color( 0, 0, 0, 255 ) )
-	self.lblRatio:SetFGColor( Color( 0, 0, 0, 255 ) )
-	self.lblHours:SetFGColor( Color( 0, 0, 0, 255 ) )
-  	self.lblStatus:SetFGColor( Color( 0, 0, 0, 255 ) )
+	self.lblPing:SetFGColor( infoLabelColor )
+	self.lblKills:SetFGColor( infoLabelColor )
+	self.lblDeaths:SetFGColor( infoLabelColor )
+	self.lblTeam:SetFGColor( infoLabelColor )
+	self.lblHealth:SetFGColor( infoLabelColor )
+	self.lblRatio:SetFGColor( infoLabelColor )
+	self.lblHours:SetFGColor( infoLabelColor )
+  	self.lblStatus:SetFGColor( infoLabelColor )
 end
 
 --- UpdateScoreboard
 function PANEL:UpdateScoreboard( force )
-	if self then 
-		if not force and not self:IsVisible() then 
-			return false
-		end
-	
-		for k, v in pairs( self.PlayerRows ) do
-			if type(k) == "string" then
-				v:Remove()
-				self.PlayerRows[ k ] = nil			
-			elseif not k:IsValid() then		
-				v:Remove()
-				self.PlayerRows[ k ] = nil			
-			end	
-		end
+	if not self then return end
+	if not force and not self:IsVisible() then 
+		return false
+	end
+
+	for k, v in pairs( self.PlayerRows ) do
+		if type(k) == "string" then
+			v:Remove()
+			self.PlayerRows[ k ] = nil			
+		elseif not IsValid(k) then		
+			v:Remove()
+			self.PlayerRows[ k ] = nil			
+		end	
+	end
 		
-		local PlayerList = player.GetAll()	
-		PlayerList = table.Add(PlayerList, self.connectingPlayers)
-		--print("all connecting players:")
-		--PrintTable(connectingPlayers)
-		for id, pl in pairs( PlayerList ) do
-			if not self:GetPlayerRow( pl ) then		
-				self:AddPlayerRow( pl )
-			end		
-		end
+	local PlayerList = player.GetAll()	
+	PlayerList = table.Add(PlayerList, self.connectingPlayers)
+	--print("all connecting players:")
+	--PrintTable(connectingPlayers)
+	for _, pl in ipairs( PlayerList ) do
+		if not self:GetPlayerRow( pl ) then		
+			self:AddPlayerRow( pl )
+		end		
+	end
 		
-		-- Always invalidate the layout so the order gets updated
-		self:InvalidateLayout()
+	-- Always invalidate the layout so the order gets updated
+	self:InvalidateLayout()
+end
+
+--- Think
+function PANEL:Think()
+	if not self.UptimeUpdate or self.UptimeUpdate < CurTime() then
+		self.UptimeUpdate = CurTime() + 0.5
+		self.Description:SetText( "Server Uptime: " .. Scoreboard.formatTime( CurTime() ) )
 	end
 end
 

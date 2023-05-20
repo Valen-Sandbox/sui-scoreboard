@@ -21,7 +21,7 @@ include( "vote_button.lua" )
 
 local PANEL = {}
 
-surface.CreateFont(  "suiscoreboardcardinfo", { font = "DefaultSmall", size = 12, weight = 0, antialiasing = true} )
+surface.CreateFont(  "suiscoreboardcardinfo", { font = "bahnschrift", size = 13, weight = 0, antialiasing = true} )
 
 --- Init
 function PANEL:Init()
@@ -116,7 +116,7 @@ function PANEL:UpdatePlayerData()
 	if not self.Player:IsValid() then return end
 
 	self:SetInfo( 1, "Props:", self.Player:GetCount( "props" ) )
-	self:SetInfo( 1, "HoverBalls:", self.Player:GetCount( "hoverballs" ) )
+	self:SetInfo( 1, "Hoverballs:", self.Player:GetCount( "hoverballs" ) )
 	self:SetInfo( 1, "Thrusters:", self.Player:GetCount( "thrusters" ) )
 	self:SetInfo( 1, "Balloons:", self.Player:GetCount( "balloons" ) )
 	self:SetInfo( 1, "Buttons:", self.Player:GetCount( "buttons" ) )
@@ -126,7 +126,7 @@ function PANEL:UpdatePlayerData()
 	self:SetInfo( 2, "Ragdolls:", self.Player:GetCount( "ragdolls" ) )
 	self:SetInfo( 2, "Effects:", self.Player:GetCount( "effects" ) )
 	self:SetInfo( 2, "Vehicles:", self.Player:GetCount( "vehicles" ) )
-	self:SetInfo( 2, "Npcs:", self.Player:GetCount( "npcs" ) )
+	self:SetInfo( 2, "NPCs:", self.Player:GetCount( "npcs" ) )
 	self:SetInfo( 2, "Emitters:", self.Player:GetCount( "emitters" ) )
 	self:SetInfo( 2, "Lamps:", self.Player:GetCount( "lamps" ) )
 	self:SetInfo( 2, "Spawners:", self.Player:GetCount( "spawners" ) )

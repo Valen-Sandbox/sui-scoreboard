@@ -416,8 +416,8 @@ function PANEL:PerformLayout()
 	self.lblFrags:SetPos( self:GetWide() - COLUMN_SIZE * 5.4, 0 )
 	self.lblHealth:SetPos( self:GetWide() - COLUMN_SIZE * 6.4, 0 )
 	self.lblHours:SetPos( self:GetWide() - COLUMN_SIZE * 10.3, 0 )
-	self.lblTeam:SetPos( self:GetWide() - COLUMN_SIZE * 13.2, 3 )
-  	self.lblStatus:SetPos( self:GetWide() - COLUMN_SIZE * 16, 3 )
+	self.lblTeam:SetPos( self:GetWide() - COLUMN_SIZE * 13.2, 0 )
+  	self.lblStatus:SetPos( self:GetWide() - COLUMN_SIZE * 16, 0 )
 
 	if self.Open or self.Size ~= self.TargetSize then
 		self.infoCard:SetVisible( true )

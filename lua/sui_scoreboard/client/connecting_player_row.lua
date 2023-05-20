@@ -55,7 +55,7 @@ end
 --- UpdatePlayerData
 function PANEL:UpdatePlayerData()
 	self.lblName:SetText( self.PlayerName )
-	self.lblStatus:SetText( "Connecting" )
+	self.lblStatus:SetText( "Connecting..." )
 
 	self.lblHours:SetText( "" )
 	self.lblHealth:SetText( "" )
@@ -89,7 +89,7 @@ function PANEL:Init()
 	self.lblAvatarFix = vgui.Create( "DLabel", self )
 	self.lblAvatarFix:SetText("")
 	self.lblAvatarFix:SetCursor( "hand" )
-	self.lblAvatarFix.DoClick = function  () gui.OpenURL("http://steamcommunity.com/profiles/" .. self.PlayerId64) end
+	self.lblAvatarFix.DoClick = function  () gui.OpenURL("https://steamcommunity.com/profiles/" .. self.PlayerId64) end
 	
 	-- If you don't do this it'll block your clicks
 	self.lblName:SetMouseInputEnabled( false )
@@ -189,6 +189,7 @@ function PANEL:PerformLayout()
 	self.lblTeam:SizeToContents()	
 	self.lblMute:SetSize(32,32)
 	self.lblHours:SizeToContents()
+	self.lblStatus:SizeToContents()
 	
 	self.imgAvatar:SetPos( 21, 4 ) 
  	self.imgAvatar:SetSize( 32, 32 )

@@ -37,7 +37,7 @@ function PANEL:Paint(w,h)
 	end
 	
 	draw.RoundedBox( 4, 0, 0, self:GetWide(), self:GetTall(), bgColor )	
-	draw.SimpleText( self.Text, "DefaultSmall", self:GetWide() / 2, self:GetTall() / 2, Color(0,0,0,150), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	draw.SimpleText( self.Text, "suiscoreboardsuiscinfo", self:GetWide() / 2, self:GetTall() / 2, Color(0,0,0,150), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	
 	return true
 end
