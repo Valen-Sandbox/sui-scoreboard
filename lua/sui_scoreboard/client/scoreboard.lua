@@ -2,7 +2,7 @@
 
 SUI Scoreboard v2.6 by .Z. Dathus [BR] is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 ----------------------------------------------------------------------------------------------------------------------------
-Copyright (c) 2014 - 2021 .Z. Dathus [BR] <http://www.juliocesar.me> <http://steamcommunity.com/profiles/76561197983103320>
+Copyright (c) 2014 - 2024 Dathus [BR] <http://www.juliocesar.me> <http://steamcommunity.com/profiles/76561197983103320>
 
 This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/deed.en_US.
@@ -12,7 +12,7 @@ Copyright only on the code that I wrote, my implementation and fixes and etc, Th
 ----------------------------------------------------------------------------------------------------------------------------
 
 $Id$
-Version 2.6.3 - 2021-07-01 06:14 PM(UTC -03:00)
+Version 2.6 - 2023-06-06 8:00 PM(UTC -03:00)
 
 ]]--
 
@@ -57,7 +57,7 @@ function PANEL:Init()
 	self.Logog:SetText( "g" )
 
 	self.SuiSc = vgui.Create( "DLabel", self )
-	self.SuiSc:SetText( "SUI Scoreboard v2.6 by .Z. Nexus" )
+	self.SuiSc:SetText( "SUI Scoreboard v" .. Scoreboard.version .. " by Dathus [BR]" )
 	self.SuiSc:SetCursor( "hand" )
 	self.SuiSc.DoClick = function() gui.OpenURL("https://steamcommunity.com/profiles/76561197983103320") end
 	self.SuiSc:SetMouseInputEnabled( true )
@@ -95,7 +95,7 @@ function PANEL:Init()
 	self.lblTeam = vgui.Create( "DLabel", self )
 	self.lblTeam:SetText( "Rank" )
 
-  	self.lblStatus = vgui.Create( "DLabel", self )
+	self.lblStatus = vgui.Create( "DLabel", self )
 	self.lblStatus:SetText( "Status" )
 
 	self.lblMute = vgui.Create( "DImageButton", self)
@@ -109,19 +109,17 @@ function PANEL:Init()
 		local steamid64 = net.ReadString()
 
 		self.connectingPlayers[id] = {name, steamid, steamid64}
-		--print("player " .. name .. " connected, adding to list. List now has " .. #self.connectingPlayers .. " stuff")
 	end )
 
 	gameevent.Listen( "player_disconnect" )
 	hook.Add( "player_disconnect", "suiscoreboardPlayerDisconnect", function( data )
 		local name = data.name			-- Same as Player:Nick()
-		local steamid = data.networkid		-- Same as Player:SteamID()
+		local steamid = data.networkid	-- Same as Player:SteamID()
 		local id = data.userid			-- Same as Player:UserID()
 		local bot = data.bot			-- Same as Player:IsBot()
 		local reason = data.reason		-- Text reason for disconnected such as "Kicked by console!", "Timed out!", etc...
 
 		self.connectingPlayers[id] = nil
-		--print("player " .. name .. " disconnected, removing from list. List now has " .. #self.connectingPlayers .. " stuff")
 	end )
 
 	gameevent.Listen( "player_spawn" )
@@ -129,7 +127,6 @@ function PANEL:Init()
 		local id = data.userid	-- Same as Player:UserID()
 
 		self.connectingPlayers[id] = nil
-		--print("player " .. id .. " spawned, adding to list. List now has " .. #self.connectingPlayers .. " stuff")
 	end )
 end
 
@@ -324,8 +321,7 @@ function PANEL:UpdateScoreboard( force )
 
 	local PlayerList = player.GetAll()
 	PlayerList = table.Add(PlayerList, self.connectingPlayers)
-	--print("all connecting players:")
-	--PrintTable(connectingPlayers)
+
 	for _, pl in ipairs( PlayerList ) do
 		if not self:GetPlayerRow( pl ) then
 			self:AddPlayerRow( pl )
