@@ -142,22 +142,22 @@ Scoreboard.formatTime = function (time)
   local d = ttime % 7
   local w = math.floor(ttime / 7)
   local str = ""
-  str = (w>0 and w.."w " or "")..(d>0 and d.."d " or "")
+  str = (w > 0 and w .. "w " or "") .. (d > 0 and d .. "d " or "")
 
-  return string.format( str.."%02ih %02im %02is", h, m, s )
+  return string.format( str .. "%02ih %02im %02is", h, m, s )
 end
 
 -- Get player's Played time
 Scoreboard.getPlayerTime = function (ply)
   -- Check if ULX and uTime is Installed
-  if ulx ~= nil and ply:GetNWInt( "TotalUTime", -1 ) ~= -1 then
+  if ulx ~= nil and ply.GetUTime then
     -- Get player's played time
-    return math.floor((ply:GetUTime() + CurTime() - ply:GetUTimeStart()))
+    return math.floor(ply:GetUTime() + CurTime() - ply:GetUTimeStart())
   elseif evolve ~= nil then
     return evolve:Time() - ply:GetNWInt( "EV_JoinTime" ) + ply:GetNWInt( "EV_PlayTime" )
   elseif maestro_promote then
     return CurTime() - ply:GetNWInt("maestro-promote", CurTime())
-  elseif Mercury~=nil then
+  elseif Mercury ~= nil then
     return ply:GetNWInt("ranktime", 0)
   else
     -- Get Time
