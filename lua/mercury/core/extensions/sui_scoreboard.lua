@@ -12,9 +12,17 @@ Copyright only on the code that I wrote, my implementation and fixes and etc, Th
 ----------------------------------------------------------------------------------------------------------------------------
 
 $Id$
-Version 2.7 - 2023-06-06 8:00 PM(UTC -03:00)
+Version 2.7 - 2024-05-19 10:47 AM(UTC -03:00)
 
 ]]--
 
--- Start Receving Scoreboard Player Color
-net.Receive("SUIScoreboardPlayerColor", Scoreboard.netGetPlayerColor)
+hook.Add("PlayerInitialSpawn", "SUISCOREBOARD-Spawn", Scoreboard.PlayerSpawn)
+
+Scoreboard.SendColor = function (ply)
+    
+    tColor = Mercury.Ranks.RankTable[ply:GetNWString("UserRank")].color 
+
+    net.Start("SUIScoreboardPlayerColor")
+    net.WriteTable(tColor)
+    net.Send(ply)
+  end

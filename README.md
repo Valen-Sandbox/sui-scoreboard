@@ -2,7 +2,7 @@ This fork adds support for displaying [ULX Buildmode][buildmode] status and make
 
 [![ScreenShot](https://raw.githubusercontent.com/ZionDevelopers/sui-scoreboard/master/logo.jpg)][workshop]
 
-SUI Scoreboard V2.6 is a [Garry's Mod][] addon which is based on the original SUI Scoreboard v2 developed by suicidal.banana.
+SUI Scoreboard V2.7 is a [Garry's Mod][] addon which is based on the original SUI Scoreboard v2 developed by suicidal.banana.
 This is a game addon for [Garry's Mod][] servers, NOT FOR SINGLEPLAYER!
 
 ### Features
@@ -15,7 +15,8 @@ This is a game addon for [Garry's Mod][] servers, NOT FOR SINGLEPLAYER!
 * Lots of bugs fixed and lots of improvements since SUI Scoreboard v2.
 
 ### Compatibility
-[uTime][uTime] is required if you use ULX and want to keep the hour tracking after restart.
+[uTime][uTime] is required if you use ULX and want to keep the hour tracking after restart. <br />
+[Evolve][Evolve]: To this addon to work, You need to delete the file garrysmod/addons/evolve/lua/ev_plugins/sh_scoreboard.lua !
 
 ### Setup
 
