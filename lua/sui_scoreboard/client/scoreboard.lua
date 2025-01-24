@@ -251,8 +251,8 @@ function PANEL:PerformLayout()
 	self.lblKills:SetPos( self:GetWide() - COLUMN_SIZE*5.4 - self.lblKills:GetWide()/2, self.PlayerFrame.y - self.lblPing:GetTall() - 3  )
 	self.lblHealth:SetPos( self:GetWide() - COLUMN_SIZE*6.4 - self.lblKills:GetWide()/2, self.PlayerFrame.y - self.lblPing:GetTall() - 3  )
 	self.lblHours:SetPos( self:GetWide() - COLUMN_SIZE*10.2 - self.lblKills:GetWide()/2, self.PlayerFrame.y - self.lblPing:GetTall() - 3  )
+	self.lblStatus:SetPos( self:GetWide() - COLUMN_SIZE*13.1 - self.lblKills:GetWide()/2, self.PlayerFrame.y - self.lblPing:GetTall() - 3  )
 	self.lblTeam:SetPos( self:GetWide() - COLUMN_SIZE*16 - self.lblKills:GetWide()/2, self.PlayerFrame.y - self.lblPing:GetTall() - 3  )
-	self.lblStatus:SetPos( self:GetWide() - COLUMN_SIZE*16 - self.lblKills:GetWide()/2, self.PlayerFrame.y - self.lblPing:GetTall() - 3  )
 end
 
 --- ApplySchemeSettings
@@ -262,11 +262,11 @@ function PANEL:ApplySchemeSettings()
 	self.Logog:SetFont( "suiscoreboardlogotext" )
 	self.SuiSc:SetFont( "suiscoreboardsuisctext" )
 
-  if evolve == nil then
-    tColor = team.GetColor(LocalPlayer():Team())
-  else
-    tColor = evolve.ranks[ LocalPlayer():EV_GetRank() ].Color
-  end
+	if evolve == nil then
+		tColor = team.GetColor(LocalPlayer():Team())
+	else
+		tColor = evolve.ranks[ LocalPlayer():EV_GetRank() ].Color
+	end
 
 	self.Hostname:SetFGColor( Color( tColor.r, tColor.g, tColor.b, 255 ) )
 	self.Description:SetFGColor( sectionLabelColor )
@@ -281,7 +281,7 @@ function PANEL:ApplySchemeSettings()
 	self.lblHealth:SetFont( "suiscoreboardsuiscinfo" )
 	self.lblRatio:SetFont( "suiscoreboardsuiscinfo" )
 	self.lblHours:SetFont( "suiscoreboardsuiscinfo" )
-  	self.lblStatus:SetFont( "suiscoreboardsuiscinfo" )
+	self.lblStatus:SetFont( "suiscoreboardsuiscinfo" )
 
 	self.lblPing:SetColor( sectionLabelColor )
 	self.lblKills:SetColor( sectionLabelColor )
@@ -290,7 +290,7 @@ function PANEL:ApplySchemeSettings()
 	self.lblHealth:SetColor( sectionLabelColor )
 	self.lblRatio:SetColor( sectionLabelColor )
 	self.lblHours:SetColor( sectionLabelColor )
-  	self.lblStatus:SetColor( sectionLabelColor )
+	self.lblStatus:SetColor( sectionLabelColor )
 
 	self.lblPing:SetFGColor( infoLabelColor )
 	self.lblKills:SetFGColor( infoLabelColor )
@@ -299,7 +299,7 @@ function PANEL:ApplySchemeSettings()
 	self.lblHealth:SetFGColor( infoLabelColor )
 	self.lblRatio:SetFGColor( infoLabelColor )
 	self.lblHours:SetFGColor( infoLabelColor )
-  	self.lblStatus:SetFGColor( infoLabelColor )
+	self.lblStatus:SetFGColor( infoLabelColor )
 end
 
 --- UpdateScoreboard
