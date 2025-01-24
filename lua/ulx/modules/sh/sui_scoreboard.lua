@@ -19,8 +19,8 @@ Version 2.7 - 2023-06-06 8:00 PM(UTC -03:00)
 if SERVER then
   AddCSLuaFile()
   hook.Add("PlayerInitialSpawn", "SUISCOREBOARD-Spawn", Scoreboard.PlayerSpawn)
-  Scoreboard.SendColor = function (ply)   
-    tColor = team.GetColor( ply:Team())   
+  Scoreboard.SendColor = function (ply)
+    tColor = team.GetColor( ply:Team())
 
     net.Start("SUIScoreboardPlayerColor")
     net.WriteTable(tColor)
@@ -31,22 +31,22 @@ elseif CLIENT then
   hook.Add("ScoreboardHide", "SUISCOREBOARD-Hide", Scoreboard.Hide)
   -- Kick player
   Scoreboard.kick = function (ply)
-    if ply:IsValid() then      
-      LocalPlayer():ConCommand( "ulx kick \"".. ply:Nick().. "\" \"Kicked By Administrator\"" )    
+    if ply:IsValid() then
+      LocalPlayer():ConCommand( "ulx kick \"".. ply:Nick().. "\" \"Kicked By Administrator\"" )
     end
   end
 
   -- Permanent ban player
-  Scoreboard.pBan = function(ply) 
-    if ply:IsValid() then 
-      LocalPlayer():ConCommand( "ulx ban \"".. ply:Nick().. "\" 0 \" Banned permanently by Administrator\"" ) 
+  Scoreboard.pBan = function(ply)
+    if ply:IsValid() then
+      LocalPlayer():ConCommand( "ulx ban \"".. ply:Nick().. "\" 0 \" Banned permanently by Administrator\"" )
     end
   end
 
   -- Ban player
-  Scoreboard.ban = function(ply) 
+  Scoreboard.ban = function(ply)
     if ply:IsValid() then
-      LocalPlayer():ConCommand( "ulx ban \"".. ply:Nick().. "\" 60 \" Banned for 1 hour by Administrator\"" )    
+      LocalPlayer():ConCommand( "ulx ban \"".. ply:Nick().. "\" 60 \" Banned for 1 hour by Administrator\"" )
     end
   end
 
@@ -64,15 +64,15 @@ elseif CLIENT then
 
   -- Get player's Team Name
   Scoreboard.getGroup = function (ply)
-    return Scoreboard.getXGUITeamName(ply:GetUserGroup())    
+    return Scoreboard.getXGUITeamName(ply:GetUserGroup())
   end
 
   -- Get player's Played time
   Scoreboard.getPlayerTime = function (ply)
     -- Check if ULX and uTime is Installed
-    if ply:GetNWInt( "TotalUTime", -1 ) ~= -1 then
+    if ply.GetUTime then
       -- Get player's played time
-      return math.floor((ply:GetUTime() + CurTime() - ply:GetUTimeStart()))
+      return math.floor(ply:GetUTime() + CurTime() - ply:GetUTimeStart())
     else
       -- Get Time
       return ply:GetNWInt( "Time_Fixed" ) + (CurTime() - ply:GetNWInt( "Time_Join" ))
