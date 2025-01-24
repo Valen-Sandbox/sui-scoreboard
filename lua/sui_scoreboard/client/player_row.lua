@@ -19,6 +19,7 @@ Version 2.7 - 2024-05-19 11:25 AM (UTC -03:00)
 include( "player_infocard.lua" )
 
 local texGradient = surface.GetTextureID( "gui/center_gradient" )
+local nameColor = Color(0, 0, 0, 255)
 
 surface.GetTextureID( "gui/silkicons/emoticon_smile" )
 local PANEL = {}
@@ -110,13 +111,17 @@ function PANEL:UpdatePlayerData()
 		return false
 	end
 
+	local k = self.Player:Frags()
+	local d = self.Player:Deaths()
+	local kdr = "--   "
+
 	self.lblName:SetText( self.Player:Nick() )
 	self.lblTeam:SetText( Scoreboard.getGroup( self.Player ) )
 
-	self.lblHours:SetText( Scoreboard.formatTime( Scoreboard.getPlayerTime( self.Player ) ))
+	self.lblHours:SetText( Scoreboard.formatTime( Scoreboard.getPlayerTime( self.Player ) ) )
 	self.lblHealth:SetText( self.Player:Health() )
-	self.lblFrags:SetText( self.Player:Frags() )
-	self.lblDeaths:SetText( self.Player:Deaths() )
+	self.lblFrags:SetText( k )
+	self.lblDeaths:SetText( d )
 	self.lblPing:SetText( self.Player:Ping() )
 
 	-- Change build/pvp status
@@ -144,10 +149,6 @@ function PANEL:UpdatePlayerData()
 	self.lblMute.DoRightClick = function()
 		self:ShowMicVolumeSlider()
 	end
-
-	local k = self.Player:Frags()
-	local d = self.Player:Deaths()
-	local kdr = "--   "
 
 	if d ~= 0 then
 		kdr = k / d
@@ -298,7 +299,7 @@ function PANEL:Init()
 	self.lblAvatarFix = vgui.Create( "DLabel", self )
 	self.lblAvatarFix:SetText("")
 	self.lblAvatarFix:SetCursor( "hand" )
-	self.lblAvatarFix.DoClick = function  () self.Player:ShowProfile() end
+	self.lblAvatarFix.DoClick = function() self.Player:ShowProfile() end
 
 	-- If you don't do this it'll block your clicks
 	self.lblName:SetMouseInputEnabled( false )
@@ -328,29 +329,27 @@ function PANEL:ApplySchemeSettings()
 	self.lblStatus:SetFont( "suiscoreboardplayername"  )
 	self.lblAvatarFix:SetFont( "suiscoreboardplayername"  )
 
-	local namecolor = Color(0,0,0,255)
+	self.lblName:SetColor( nameColor )
+	self.lblTeam:SetColor( nameColor )
+	self.lblHours:SetColor( nameColor )
+	self.lblHealth:SetColor( nameColor )
+	self.lblFrags:SetColor( nameColor )
+	self.lblDeaths:SetColor( nameColor )
+	self.lblRatio:SetColor( nameColor )
+	self.lblPing:SetColor( nameColor )
+	self.lblStatus:SetColor( nameColor )
+	self.lblAvatarFix:SetColor( nameColor)
 
-	self.lblName:SetColor( namecolor )
-	self.lblTeam:SetColor( namecolor )
-	self.lblHours:SetColor( namecolor )
-	self.lblHealth:SetColor( namecolor )
-	self.lblFrags:SetColor( namecolor )
-	self.lblDeaths:SetColor( namecolor )
-	self.lblRatio:SetColor( namecolor )
-	self.lblPing:SetColor( namecolor )
-	self.lblStatus:SetColor( namecolor )
-	self.lblAvatarFix:SetColor( namecolor)
-
-	self.lblName:SetFGColor( Color( 0, 0, 0, 255 ) )
-	self.lblTeam:SetFGColor( Color( 0, 0, 0, 255 ) )
-	self.lblHours:SetFGColor( Color( 0, 0, 0, 255 ) )
-	self.lblHealth:SetFGColor( Color( 0, 0, 0, 255 ) )
-	self.lblFrags:SetFGColor( Color( 0, 0, 0, 255 ) )
-	self.lblDeaths:SetFGColor( Color( 0, 0, 0, 255 ) )
-	self.lblRatio:SetFGColor( Color( 0, 0, 0, 255 ) )
-	self.lblPing:SetFGColor( Color( 0, 0, 0, 255 ) )
-	self.lblStatus:SetFGColor( Color( 0, 0, 0, 255 ) )
-	self.lblAvatarFix:SetFGColor( Color( 0, 0, 0, 0 ) )
+	self.lblName:SetFGColor( nameColor )
+	self.lblTeam:SetFGColor( nameColor )
+	self.lblHours:SetFGColor( nameColor )
+	self.lblHealth:SetFGColor( nameColor )
+	self.lblFrags:SetFGColor( nameColor )
+	self.lblDeaths:SetFGColor( nameColor )
+	self.lblRatio:SetFGColor( nameColor )
+	self.lblPing:SetFGColor( nameColor )
+	self.lblStatus:SetFGColor( nameColor )
+	self.lblAvatarFix:SetFGColor( color_transparent )
 end
 
 --- DoClick
@@ -396,7 +395,7 @@ function PANEL:PerformLayout()
 	self.lblName:SizeToContents()
 	self.lblName:SetPos( 60, 3 )
 	self.lblTeam:SizeToContents()
-	self.lblMute:SetSize(32,32)
+	self.lblMute:SetSize( 32, 32 )
 	self.lblHours:SizeToContents()
 
 	self.imgAvatar:SetPos( 21, 4 )
