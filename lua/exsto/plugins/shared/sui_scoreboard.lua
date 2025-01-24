@@ -74,7 +74,7 @@ if CLIENT then
   end
 elseif SERVER then
   Scoreboard.SendColor = function (ply)
-    tColor = team.GetColor( ply:Team())
+    local tColor = team.GetColor( ply:Team())
 
     net.Start("SUIScoreboardPlayerColor")
     net.WriteTable(tColor)

@@ -20,9 +20,9 @@ if SERVER then
   AddCSLuaFile()
   hook.Add("PlayerInitialSpawn", "SUISCOREBOARD-Spawn", Scoreboard.PlayerSpawn)
 
-  Scoreboard.SendColor = function (ply)   
-    tColor = maestro.rankcolor(maestro.userrank(ply)) or team.GetColor(ply:Team())
-        
+  Scoreboard.SendColor = function (ply)
+    local tColor = maestro.rankcolor(maestro.userrank(ply)) or team.GetColor(ply:Team())
+
     net.Start("SUIScoreboardPlayerColor")
     net.WriteTable(tColor)
     net.Send(ply)
@@ -33,27 +33,27 @@ elseif CLIENT then
 
   -- Kick player
   Scoreboard.kick = function (ply)
-    if ply:IsValid() then 
-      LocalPlayer():ConCommand( "ms kick \"$" .. ply:SteamID() .. "\" \"Kicked By Administrator\"" )   
+    if ply:IsValid() then
+      LocalPlayer():ConCommand( "ms kick \"$" .. ply:SteamID() .. "\" \"Kicked By Administrator\"" )
     end
   end
 
   -- Permanent ban player
-  Scoreboard.pBan = function(ply) 
-    if ply:IsValid() then 
-      LocalPlayer():ConCommand( "ms ban \"$" .. ply:SteamID() .. "\" 0 \"Banned permanently by Administrator\"" )     
+  Scoreboard.pBan = function(ply)
+    if ply:IsValid() then
+      LocalPlayer():ConCommand( "ms ban \"$" .. ply:SteamID() .. "\" 0 \"Banned permanently by Administrator\"" )
     end
   end
 
   -- Ban player
-  Scoreboard.ban = function(ply) 
+  Scoreboard.ban = function(ply)
     if ply:IsValid() then
-      LocalPlayer():ConCommand( "ms ban \"$" .. ply:SteamID() .. "\" 1h \"Banned permanently by Administrator\"" )   
+      LocalPlayer():ConCommand( "ms ban \"$" .. ply:SteamID() .. "\" 1h \"Banned permanently by Administrator\"" )
     end
   end
   -- Get player's Team Name
   Scoreboard.getGroup = function (ply)
-    return maestro.userrank(ply)   
+    return maestro.userrank(ply)
   end
   -- Get player's Played time
   Scoreboard.getPlayerTime = function (ply)

@@ -19,10 +19,9 @@ Version 2.7 - 2024-05-19 10:47 AM(UTC -03:00)
 hook.Add("PlayerInitialSpawn", "SUISCOREBOARD-Spawn", Scoreboard.PlayerSpawn)
 
 Scoreboard.SendColor = function (ply)
-    
-    tColor = Mercury.Ranks.RankTable[ply:GetNWString("UserRank")].color 
+    local tColor = Mercury.Ranks.RankTable[ply:GetNWString("UserRank")].color
 
     net.Start("SUIScoreboardPlayerColor")
     net.WriteTable(tColor)
     net.Send(ply)
-  end
+end

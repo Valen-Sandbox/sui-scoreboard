@@ -21,12 +21,10 @@ include( "player_infocard.lua" )
 local texGradient = surface.GetTextureID( "gui/center_gradient" )
 local nameColor = Color(0, 0, 0, 255)
 
-surface.GetTextureID( "gui/silkicons/emoticon_smile" )
 local PANEL = {}
 
 --- Paint
 function PANEL:Paint(w,h)
-
 	local color = Color( 100, 100, 100, 255 )
 
 	if self.Armed then
@@ -37,7 +35,7 @@ function PANEL:Paint(w,h)
 		color = Color( 125, 125, 125, 255 )
 	end
 
-	ply = self.Player
+	local ply = self.Player
 
 	if ply:IsValid() then
 		if ply:Team() == TEAM_CONNECTING then
@@ -46,13 +44,12 @@ function PANEL:Paint(w,h)
 			if ply:Team() == TEAM_UNASSIGNED then
 				color = Color( 100, 100, 100, 255 )
 			else
-			  if evolve == nil then
-				  tcolor = team.GetColor(ply:Team())
-				  color = Color(tcolor.r,tcolor.g,tcolor.b,225)
+				if evolve == nil then
+					local tcolor = team.GetColor(ply:Team())
+					color = Color(tcolor.r,tcolor.g,tcolor.b,225)
 				else
-				 tcolor = evolve.ranks[ ply:EV_GetRank() ].Color
-
-				 color = Color(tcolor.r,tcolor.g,tcolor.b,225)
+					local tcolor = evolve.ranks[ ply:EV_GetRank() ].Color
+					color = Color(tcolor.r,tcolor.g,tcolor.b,225)
 				end
 			end
 		elseif ply:IsAdmin() then
@@ -60,30 +57,30 @@ function PANEL:Paint(w,h)
 		end
 
 		if ply == LocalPlayer() then
-        if evolve == nil then
-          tcolor = team.GetColor(ply:Team())
-          color = Color(tcolor.r,tcolor.g,tcolor.b,225)
-        else
-         tcolor = evolve.ranks[ ply:EV_GetRank() ].Color
-         color = Color(tcolor.r,tcolor.g,tcolor.b,225)
-        end
+			if evolve == nil then
+				local tcolor = team.GetColor(ply:Team())
+				color = Color(tcolor.r,tcolor.g,tcolor.b,225)
+			else
+				local tcolor = evolve.ranks[ ply:EV_GetRank() ].Color
+				color = Color(tcolor.r,tcolor.g,tcolor.b,225)
+			end
 		end
 	end
 
 	if self.Open or self.Size ~= self.TargetSize then
-		draw.RoundedBox( 4, 18, 16, self:GetWide()-36, self:GetTall() - 16, color )
-		draw.RoundedBox( 4, 20, 16, self:GetWide()-40, self:GetTall() - 16 - 2, Color( 225, 225, 225, 150 ) )
+		draw.RoundedBox( 4, 18, 16, w - 36, h - 16, color )
+		draw.RoundedBox( 4, 20, 16, w - 40, h - 16 - 2, Color( 225, 225, 225, 150 ) )
 
 		surface.SetTexture( texGradient )
 		surface.SetDrawColor( 255, 255, 255, 100 )
-		surface.DrawTexturedRect( 20, 16, self:GetWide()-40, self:GetTall() - 16 - 2 )
+		surface.DrawTexturedRect( 20, 16, w - 40, h - 16 - 2 )
 	end
 
-	draw.RoundedBox( 4, 18, 0, self:GetWide()-36, 38, color )
+	draw.RoundedBox( 4, 18, 0, w - 36, 38, color )
 
 	surface.SetTexture( texGradient )
 	surface.SetDrawColor( 255, 255, 255, 150 )
-	surface.DrawTexturedRect( 0, 0, self:GetWide()-36, 38 )
+	surface.DrawTexturedRect( 0, 0, w - 36, 38 )
 
 	return true
 end
@@ -119,6 +116,7 @@ function PANEL:UpdatePlayerData()
 	self.lblTeam:SetText( Scoreboard.getGroup( self.Player ) )
 
 	self.lblHours:SetText( Scoreboard.formatTime( Scoreboard.getPlayerTime( self.Player ) ) )
+	self.lblHours:SizeToContents()
 	self.lblHealth:SetText( self.Player:Health() )
 	self.lblFrags:SetText( k )
 	self.lblDeaths:SetText( d )
@@ -134,7 +132,7 @@ function PANEL:UpdatePlayerData()
 	self.lblStatus:SetText( buildStatus )
 
 	-- Change the icon of the mute button based on state
-	if  self.Muted == nil or self.Muted ~= self.Player:IsMuted() then
+	if self.Muted == nil or self.Muted ~= self.Player:IsMuted() then
 		self.Muted = self.Player:IsMuted()
 		if self.Muted then
 			self.lblMute:SetImage( "icon32/muted.png" )
@@ -143,11 +141,6 @@ function PANEL:UpdatePlayerData()
 		end
 
 		self.lblMute.DoClick = function() self.Player:SetMuted( not self.Muted ) end
-	end
-
-	-- Show the super awesome port of the vanilla gmod volume slider when right click
-	self.lblMute.DoRightClick = function()
-		self:ShowMicVolumeSlider()
 	end
 
 	if d ~= 0 then
@@ -205,7 +198,8 @@ function PANEL:ShowMicVolumeSlider()
    currentPlayerVolume = currentPlayerVolume ~= nil and currentPlayerVolume or 1
 
    -- Frame for the slider
-   local frame = vgui.Create("DFrame")
+   local frame = vgui.Create("DFrame", self)
+   self.volumeSlider = frame
    frame:SetPos(x, y)
    frame:SetSize(width, height)
    frame:MakePopup()
@@ -214,7 +208,8 @@ function PANEL:ShowMicVolumeSlider()
    frame:SetDraggable(false)
    frame:SetSizable(false)
    frame.Paint = function(self, w, h)
-      draw.RoundedBox(5, 0, 0, w, h, Color(30, 30, 30, 205))
+      local alpha = math.Clamp(Scoreboard.vgui:GetAlpha(), 0, Scoreboard.outerBoxColor.a)
+      draw.RoundedBox(5, 0, 0, w, h, ColorAlpha(Scoreboard.outerBoxColor, alpha))
    end
 
    -- Automatically close after 10 seconds (something may have gone wrong)
@@ -223,7 +218,7 @@ function PANEL:ShowMicVolumeSlider()
    -- "Player volume"
    local label = vgui.Create("DLabel", frame)
    label:SetPos(padding, padding)
-   label:SetFont("DermaDefaultBold")
+   label:SetFont("suiscoreboardsuiscinfo")
    label:SetSize(width - padding * 2, 20)
    label:SetColor(Color(255, 255, 255, 255))
    label:SetText("Player Volume:")
@@ -248,16 +243,20 @@ function PANEL:ShowMicVolumeSlider()
    -- Render slider bar
    slider.Paint = function(self, w, h)
       local volumePercent = slider:GetSlideX()
-
+      local alpha = Scoreboard.vgui:GetAlpha()
       -- Filled in box
-      draw.RoundedBox(5, 0, sliderDisplayHeight / 2, w * volumePercent, sliderDisplayHeight, Color(208, 208, 208, 255))
+      draw.RoundedBox(5, 0, sliderDisplayHeight / 2, w * volumePercent, sliderDisplayHeight, Color(208, 208, 208, alpha))
 
       -- Grey box
-      draw.RoundedBox(5, w * volumePercent, sliderDisplayHeight / 2, w * (1 - volumePercent), sliderDisplayHeight, Color(84, 84, 84, 255))
+      draw.RoundedBox(5, w * volumePercent, sliderDisplayHeight / 2, w * (1 - volumePercent), sliderDisplayHeight, Color(84, 84, 84, alpha))
+
+      label:SetColor(Color(255, 255, 255, alpha))
    end
 
    -- Render slider "knob" & text
    slider.Knob.Paint = function(self, w, h)
+      local alpha = Scoreboard.vgui:GetAlpha()
+
       if slider:IsEditing() then
          local textValue = math.Round(slider:GetSlideX() * 100) .. "%"
          local textPadding = 5
@@ -271,15 +270,14 @@ function PANEL:ShowMicVolumeSlider()
             sliderHeight + textPadding * 2, -- Height
             Color(55, 55, 55, 208)
          )
-         draw.DrawText(textValue, "DermaDefaultBold", sliderHeight / 2, -20, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER)
+         draw.DrawText(textValue, "suiscoreboardsuiscinfo", sliderHeight / 2, -20, Color(255, 255, 255, alpha), TEXT_ALIGN_CENTER)
       end
 
-      draw.RoundedBox(100, 0, 0, sliderHeight, sliderHeight, Color(255, 255, 255, 255))
+      draw.RoundedBox(100, 0, 0, sliderHeight, sliderHeight, Color(255, 255, 255, alpha))
    end
 end
 
-
---- Int
+--- Init
 function PANEL:Init()
 	self.Size = 38
 	self:OpenInfo( false )
@@ -294,8 +292,8 @@ function PANEL:Init()
 	self.lblRatio = vgui.Create( "DLabel", self )
 	self.lblPing = vgui.Create( "DLabel", self )
 	self.lblStatus = vgui.Create( "DLabel", self )
-	self.lblMute = vgui.Create( "DImageButton", self)
-	self.imgAvatar = vgui.Create("AvatarImage", self)
+	self.lblMute = vgui.Create( "DImageButton", self )
+	self.imgAvatar = vgui.Create("AvatarImage", self )
 	self.lblAvatarFix = vgui.Create( "DLabel", self )
 	self.lblAvatarFix:SetText("")
 	self.lblAvatarFix:SetCursor( "hand" )
@@ -314,6 +312,16 @@ function PANEL:Init()
 	self.imgAvatar:SetMouseInputEnabled( false )
 	self.lblMute:SetMouseInputEnabled( true )
 	self.lblAvatarFix:SetMouseInputEnabled( true )
+
+	-- Show the super awesome port of the vanilla gmod volume slider when right click
+	self.lblMute.DoRightClick = function()
+		if IsValid(self.volumeSlider) then
+			self.volumeSlider:Remove()
+			self.volumeSlider = nil
+		end
+
+		self:ShowMicVolumeSlider()
+	end
 end
 
 --- ApplySchemeSettings

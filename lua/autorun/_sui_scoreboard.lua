@@ -22,7 +22,7 @@ Scoreboard = {}
 Scoreboard.version = "2.7.0"
 
 --Setup Loading Log Formatation
-function loadingLog (text)
+local function loadingLog(text)
   --Set Max Size
   local size = 32
   --If Text Len < max size

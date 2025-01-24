@@ -37,22 +37,22 @@ end
 if CLIENT then
   -- Kick player
   Scoreboard.kick = function (ply)
-    if ply:IsValid() then 
-      LocalPlayer():ConCommand( "ev kick \"".. ply:Nick().. "\" \"Kicked By Administrator\"" )  
+    if ply:IsValid() then
+      LocalPlayer():ConCommand( "ev kick \"".. ply:Nick().. "\" \"Kicked By Administrator\"" )
     end
   end
 
   -- Permanent ban player
-  Scoreboard.pBan = function(ply) 
-    if ply:IsValid() then     
-      LocalPlayer():ConCommand( "ev ban \"".. ply:Nick().. "\" 0 \"Kicked By Administrator\"" )  
+  Scoreboard.pBan = function(ply)
+    if ply:IsValid() then
+      LocalPlayer():ConCommand( "ev ban \"".. ply:Nick().. "\" 0 \"Kicked By Administrator\"" )
     end
   end
 
   -- Ban player
-  Scoreboard.ban = function(ply) 
+  Scoreboard.ban = function(ply)
     if ply:IsValid() then
-      LocalPlayer():ConCommand( "ev ban \"".. ply:Nick().. "\" 60 \"Kicked By Administrator\"" )  
+      LocalPlayer():ConCommand( "ev ban \"".. ply:Nick().. "\" 60 \"Kicked By Administrator\"" )
     end
   end
 
@@ -63,13 +63,13 @@ if CLIENT then
 
   -- Get player's Played time
   Scoreboard.getPlayerTime = function (ply)
-    return evolve:Time() - ply:GetNWInt( "EV_JoinTime" ) + ply:GetNWInt( "EV_PlayTime" )  
+    return evolve:Time() - ply:GetNWInt( "EV_JoinTime" ) + ply:GetNWInt( "EV_PlayTime" )
   end
 
 elseif SERVER then
-  Scoreboard.SendColor = function (ply) 
-    tColor = evolve.ranks[ ply:EV_GetRank() ].Color  
-    
+  Scoreboard.SendColor = function (ply)
+    local tColor = evolve.ranks[ ply:EV_GetRank() ].Color
+
     net.Start("SUIScoreboardPlayerColor")
     net.WriteTable(tColor)
     net.Send(ply)

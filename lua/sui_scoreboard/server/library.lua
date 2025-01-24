@@ -19,24 +19,21 @@ Version 2.7 - 2024-05-19 10:24 PM (UTC -03:00)
 util.AddNetworkString( "SUIScoreboardPlayerConnecting" )
 
 --- When the player joins the server we need to restore the NetworkedInt's
-Scoreboard.PlayerSpawn = function ( ply )
-  timer.Simple( 5, function() Scoreboard.UpdatePlayerRatings( ply ) end) -- Wait a few seconds so we avoid timeouts.
-  timer.Simple( 5, function() Scoreboard.SendColor(ply) end)
+Scoreboard.PlayerSpawn = function( ply )
+	timer.Simple( 5, function() Scoreboard.UpdatePlayerRatings( ply ) end ) -- Wait a few seconds so we avoid timeouts.
+	timer.Simple( 5, function() Scoreboard.SendColor( ply ) end )
 end
 
 gameevent.Listen( "player_connect" )
 hook.Add( "player_connect", "suiscoreboardPlayerConnected", function( data )
 	local name = data.name			-- Same as Player:Nick()
 	local steamid = data.networkid	-- Same as Player:SteamID()
-	local ip = data.address			-- Same as Player:IPAddress()
 	local id = data.userid			-- Same as Player:UserID()
-	local bot = data.bot			-- Same as Player:IsBot()
-	local index = data.index		-- Same as Player:EntIndex()
 
-	net.Start("SUIScoreboardPlayerConnecting")
-	net.WriteInt(id, 32)
-	net.WriteString(name)
-	net.WriteString(steamid)
-	net.WriteString(util.SteamIDTo64(steamid))
+	net.Start( "SUIScoreboardPlayerConnecting" )
+	net.WriteUInt( id, MAX_EDICT_BITS )
+	net.WriteString( name )
+	net.WriteString( steamid )
+	net.WriteString( util.SteamIDTo64( steamid ) )
 	net.Broadcast()
 end )

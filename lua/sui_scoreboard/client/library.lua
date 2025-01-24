@@ -16,6 +16,8 @@ Version 2.7 - 2023-06-06 8:00 PM(UTC -03:00)
 
 ]]--
 
+local fadeTime = 0.2
+
 -- Create Scoreboard VGUI
 Scoreboard.CreateVGUI = function()
   if Scoreboard.vgui then
@@ -28,7 +30,7 @@ Scoreboard.CreateVGUI = function()
 end
 
 -- Show Scoreboard
-Scoreboard.Show = function ()
+Scoreboard.Show = function()
   if not Scoreboard.vgui then
     Scoreboard.CreateVGUI()
   end
@@ -38,24 +40,30 @@ Scoreboard.Show = function ()
 
   Scoreboard.vgui:SetVisible( true )
   Scoreboard.vgui:UpdateScoreboard( true )
+  Scoreboard.vgui:AlphaTo(255, fadeTime)
 
   return true
 end
 
 -- Hide Scoreboard
-Scoreboard.Hide = function ()
+Scoreboard.Hide = function()
   GAMEMODE.ShowScoreboard = false
   gui.EnableScreenClicker( false )
 
   if Scoreboard.vgui ~= nil then
-    Scoreboard.vgui:SetVisible( false )
+    Scoreboard.vgui:AlphaTo(0, fadeTime, 0, function(_, target)
+      -- NOTE: This may potentially cause the scoreboard to become stuck as invisible? May need more testing
+      timer.Simple(0.1, function() if target:IsVisible() and target:GetAlpha() == 0 then
+        target:SetVisible( false )
+      end end)
+    end)
   end
 
   return true
 end
 
 --- Format time
-Scoreboard.formatTime = function (time)
+Scoreboard.formatTime = function(time)
   local ttime = time or 0
   local s = ttime % 60
   ttime = math.floor(ttime / 60)

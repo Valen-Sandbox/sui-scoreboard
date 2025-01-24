@@ -21,7 +21,7 @@ include( "vote_button.lua" )
 
 local PANEL = {}
 
-surface.CreateFont(  "suiscoreboardcardinfo", { font = "bahnschrift", size = 13, weight = 0, antialiasing = true} )
+surface.CreateFont( "suiscoreboardcardinfo", { font = "bahnschrift", size = 13, weight = 0, antialiasing = true} )
 
 --- Init
 function PANEL:Init()
@@ -136,10 +136,10 @@ end
 
 --- ApplySchemeSettings
 function PANEL:ApplySchemeSettings()
-	for _k, column in pairs( self.InfoLabels ) do
-		for k, v in pairs( column ) do
-				v.Key:SetFGColor( 50, 50, 50, 255 )
-				v.Value:SetFGColor( 80, 80, 80, 255 )
+	for _, column in pairs( self.InfoLabels ) do
+		for _, v in pairs( column ) do
+			v.Key:SetFGColor( 50, 50, 50, 255 )
+			v.Value:SetFGColor( 80, 80, 80, 255 )
 		end
 	end
 end
@@ -161,7 +161,7 @@ function PANEL:PerformLayout()
 		local y = 0
 		local RightMost = 0
 
-		for k, v in pairs( column ) do
+		for _, v in pairs( column ) do
 			v.Key:SetPos( x, y )
 			v.Key:SizeToContents()
 
@@ -173,7 +173,7 @@ function PANEL:PerformLayout()
 			RightMost = math.max( RightMost, v.Value.x + v.Value:GetWide() )
 		end
 
-		if x<100 then
+		if x < 100 then
 			x = x + 205
 		else
 			x = x + 115
@@ -217,7 +217,7 @@ function PANEL:PerformLayout()
 end
 
 --- Paint
-function PANEL:Paint(w,h)
+function PANEL:Paint()
 	return true
 end
 

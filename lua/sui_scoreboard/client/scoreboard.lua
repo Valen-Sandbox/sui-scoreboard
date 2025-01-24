@@ -31,19 +31,11 @@ surface.CreateFont( "suiscoreboardsuiscinfo", { font = "bahnschrift", size = 13,
 
 local texGradient = surface.GetTextureID( "gui/center_gradient" )
 
-local outerBoxColor = Color( 14, 18, 25, 205 )
-local innerBoxColor = Color( 23, 25, 36, 100 )
+Scoreboard.outerBoxColor = Color( 14, 18, 25, 205 )
+Scoreboard.innerBoxColor = Color( 23, 25, 36, 100 )
 local subHeaderColor = Color( 14, 18, 25, 155 )
 local sectionLabelColor = Color( 255, 255, 227, 255 )
 local infoLabelColor = Color( 0, 0, 0, 255 )
-
-local function ColorCmp( c1, c2 )
-	if not c1 or not c2 then
-		return false
-	end
-
-	return c1.r == c2.r and c1.g == c2.g and c1.b == c2.b and c1.a == c2.a
-end
 
 local PANEL = {}
 
@@ -103,7 +95,7 @@ function PANEL:Init()
 	self.connectingPlayers = {}
 
 	net.Receive("SUIScoreboardPlayerConnecting", function()
-		local id = net.ReadInt(32)
+		local id = net.ReadUInt(MAX_EDICT_BITS)
 		local name = net.ReadString()
 		local steamid = net.ReadString()
 		local steamid64 = net.ReadString()
@@ -113,11 +105,7 @@ function PANEL:Init()
 
 	gameevent.Listen( "player_disconnect" )
 	hook.Add( "player_disconnect", "suiscoreboardPlayerDisconnect", function( data )
-		local name = data.name			-- Same as Player:Nick()
-		local steamid = data.networkid	-- Same as Player:SteamID()
 		local id = data.userid			-- Same as Player:UserID()
-		local bot = data.bot			-- Same as Player:IsBot()
-		local reason = data.reason		-- Text reason for disconnected such as "Kicked by console!", "Timed out!", etc...
 
 		self.connectingPlayers[id] = nil
 	end )
@@ -149,42 +137,44 @@ function PANEL:GetPlayerRow( ply )
 end
 
 --- Paint
-function PANEL:Paint(w,h)
-	draw.RoundedBox( 10, 0, 0, self:GetWide(), self:GetTall(), outerBoxColor )
+function PANEL:Paint(w, h)
+	draw.RoundedBox( 10, 0, 0, w, h, Scoreboard.outerBoxColor )
 	surface.SetTexture( texGradient )
 	surface.SetDrawColor( 64, 68, 75, 155 )
-	surface.DrawTexturedRect( 0, 0, self:GetWide(), self:GetTall() )
+	surface.DrawTexturedRect( 0, 0, w, h )
 
 	-- White Inner Box
-	draw.RoundedBox( 6, 15, self.Description.y - 8, self:GetWide() - 30, self:GetTall() - self.Description.y - 6, innerBoxColor )
+	draw.RoundedBox( 6, 15, self.Description.y - 8, w - 30, h - self.Description.y - 6, Scoreboard.innerBoxColor )
 	surface.SetTexture( texGradient )
 	surface.SetDrawColor( 48, 50, 61, 50 )
-	surface.DrawTexturedRect( 15, self.Description.y - 8, self:GetWide() - 30, self:GetTall() - self.Description.y - 8 )
+	surface.DrawTexturedRect( 15, self.Description.y - 8, w - 30, h - self.Description.y - 8 )
 
 	-- Sub Header
-	draw.RoundedBox( 6, 108, self.Description.y - 4, self:GetWide() - 128, self.Description:GetTall() + 8, subHeaderColor )
+	draw.RoundedBox( 6, 108, self.Description.y - 4, w - 128, self.Description:GetTall() + 8, subHeaderColor )
 	surface.SetTexture( texGradient )
 	surface.SetDrawColor( 64, 68, 75, 50 )
-	surface.DrawTexturedRect( 108, self.Description.y - 4, self:GetWide() - 128, self.Description:GetTall() + 8 )
+	surface.DrawTexturedRect( 108, self.Description.y - 4, w - 128, self.Description:GetTall() + 8 )
 
-  -- Logo!
-  if Scoreboard.playerColor.r < 255 then
-    tColorGradientR = Scoreboard.playerColor.r + 15
-  else
-    tColorGradientR = Scoreboard.playerColor.r
-  end
+	-- Logo!
+	local tColorGradientR, tColorGradientG, tColorGradientB
 
-  if Scoreboard.playerColor.g < 255 then
-    tColorGradientG = Scoreboard.playerColor.g + 15
-  else
-    tColorGradientG = Scoreboard.playerColor.g
-  end
+	if Scoreboard.playerColor.r < 255 then
+		tColorGradientR = Scoreboard.playerColor.r + 15
+	else
+		tColorGradientR = Scoreboard.playerColor.r
+	end
 
-  if Scoreboard.playerColor.b < 255 then
-    tColorGradientB = Scoreboard.playerColor.b + 15
-  else
-    tColorGradientB = Scoreboard.playerColor.b
-  end
+	if Scoreboard.playerColor.g < 255 then
+		tColorGradientG = Scoreboard.playerColor.g + 15
+	else
+		tColorGradientG = Scoreboard.playerColor.g
+	end
+
+	if Scoreboard.playerColor.b < 255 then
+		tColorGradientB = Scoreboard.playerColor.b + 15
+	else
+		tColorGradientB = Scoreboard.playerColor.b
+	end
 
 	draw.RoundedBox( 8, 24, 12, 80, 80, Color( Scoreboard.playerColor.r, Scoreboard.playerColor.g, Scoreboard.playerColor.b, 200 ) )
 	surface.SetTexture( texGradient )
@@ -193,10 +183,10 @@ function PANEL:Paint(w,h)
 end
 
 --- PerformLayout
-function PANEL:PerformLayout()
+function PANEL:PerformLayout(w, h)
 	self:SetSize( ScrW() * 0.75, ScrH() * 0.65 )
 
-	self:SetPos( (ScrW() - self:GetWide()) / 2, (ScrH() - self:GetTall()) / 2 )
+	self:SetPos( ( ScrW() - w ) / 2, ( ScrH() - h ) / 2 )
 
 	self.Hostname:SizeToContents()
 	self.Hostname:SetPos( 115, 17 )
@@ -205,13 +195,13 @@ function PANEL:PerformLayout()
 	self.Logog:SetPos( 45, 5 )
 
 	self.SuiSc:SetSize( 200, 15 )
-	self.SuiSc:SetPos( (self:GetWide() - 200), (self:GetTall() - 15) )
+	self.SuiSc:SetPos( w - 200, h - 15 )
 
 	self.Description:SizeToContents()
 	self.Description:SetPos( 115, 60 )
 
 	self.PlayerFrame:SetPos( 5, self.Description.y + self.Description:GetTall() + 20 )
-	self.PlayerFrame:SetSize( self:GetWide() - 10, self:GetTall() - self.PlayerFrame.y - 20 )
+	self.PlayerFrame:SetSize( w - 10, h - self.PlayerFrame.y - 20 )
 
 	local y = 0
 
@@ -244,15 +234,18 @@ function PANEL:PerformLayout()
 	self.lblStatus:SizeToContents()
 
 	local COLUMN_SIZE = 45
+	local lblHeight = self.PlayerFrame.y - self.lblPing:GetTall() - 3
+	local killsWidth = self.lblKills:GetWide() / 2
+	local deathsWidth = self.lblDeaths:GetWide() / 2
 
-	self.lblPing:SetPos( self:GetWide() - COLUMN_SIZE*2 - self.lblPing:GetWide()/2, self.PlayerFrame.y - self.lblPing:GetTall() - 3  )
-	self.lblRatio:SetPos( self:GetWide() - COLUMN_SIZE*3.2 - self.lblDeaths:GetWide()/2, self.PlayerFrame.y - self.lblPing:GetTall() - 3  )
-	self.lblDeaths:SetPos( self:GetWide() - COLUMN_SIZE*4.4 - self.lblDeaths:GetWide()/2, self.PlayerFrame.y - self.lblPing:GetTall() - 3  )
-	self.lblKills:SetPos( self:GetWide() - COLUMN_SIZE*5.4 - self.lblKills:GetWide()/2, self.PlayerFrame.y - self.lblPing:GetTall() - 3  )
-	self.lblHealth:SetPos( self:GetWide() - COLUMN_SIZE*6.4 - self.lblKills:GetWide()/2, self.PlayerFrame.y - self.lblPing:GetTall() - 3  )
-	self.lblHours:SetPos( self:GetWide() - COLUMN_SIZE*10.2 - self.lblKills:GetWide()/2, self.PlayerFrame.y - self.lblPing:GetTall() - 3  )
-	self.lblStatus:SetPos( self:GetWide() - COLUMN_SIZE*13.1 - self.lblKills:GetWide()/2, self.PlayerFrame.y - self.lblPing:GetTall() - 3  )
-	self.lblTeam:SetPos( self:GetWide() - COLUMN_SIZE*16 - self.lblKills:GetWide()/2, self.PlayerFrame.y - self.lblPing:GetTall() - 3  )
+	self.lblPing:SetPos( w - COLUMN_SIZE * 2 - self.lblPing:GetWide() / 2, lblHeight )
+	self.lblRatio:SetPos( w - COLUMN_SIZE * 3.2 - deathsWidth, lblHeight )
+	self.lblDeaths:SetPos( w - COLUMN_SIZE * 4.4 - deathsWidth, lblHeight )
+	self.lblKills:SetPos( w - COLUMN_SIZE * 5.4 - killsWidth, lblHeight )
+	self.lblHealth:SetPos( w - COLUMN_SIZE * 6.4 - killsWidth, lblHeight )
+	self.lblHours:SetPos( w - COLUMN_SIZE * 10.2 - killsWidth, lblHeight )
+	self.lblStatus:SetPos( w - COLUMN_SIZE * 13.1 - killsWidth, lblHeight )
+	self.lblTeam:SetPos( w - COLUMN_SIZE * 16 - killsWidth, lblHeight )
 end
 
 --- ApplySchemeSettings
@@ -261,6 +254,8 @@ function PANEL:ApplySchemeSettings()
 	self.Description:SetFont( "suiscoreboardsubtitle" )
 	self.Logog:SetFont( "suiscoreboardlogotext" )
 	self.SuiSc:SetFont( "suiscoreboardsuisctext" )
+
+	local tColor
 
 	if evolve == nil then
 		tColor = team.GetColor(LocalPlayer():Team())
@@ -271,7 +266,7 @@ function PANEL:ApplySchemeSettings()
 	self.Hostname:SetFGColor( Color( tColor.r, tColor.g, tColor.b, 255 ) )
 	self.Description:SetFGColor( sectionLabelColor )
 
-	self.Logog:SetFGColor( Color(tColor.r,tColor.g,tColor.b,225)   )
+	self.Logog:SetFGColor( Color(tColor.r, tColor.g, tColor.b, 225) )
 	self.SuiSc:SetFGColor( Color( 255, 255, 227, 200 ) )
 
 	self.lblPing:SetFont( "suiscoreboardsuiscinfo" )
