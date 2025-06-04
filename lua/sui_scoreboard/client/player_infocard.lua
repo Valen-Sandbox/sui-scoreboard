@@ -112,24 +112,26 @@ end
 
 --- UpdatePlayerData
 function PANEL:UpdatePlayerData()
-	if not self.Player then return end
-	if not self.Player:IsValid() then return end
+	local ply = self.Player
+	if not ply or not ply:IsValid() then return end
 
-	self:SetInfo( 1, "Props:", self.Player:GetCount( "props" ) )
-	self:SetInfo( 1, "Hoverballs:", self.Player:GetCount( "hoverballs" ) )
-	self:SetInfo( 1, "Thrusters:", self.Player:GetCount( "thrusters" ) )
-	self:SetInfo( 1, "Balloons:", self.Player:GetCount( "balloons" ) )
-	self:SetInfo( 1, "Buttons:", self.Player:GetCount( "buttons" ) )
-	self:SetInfo( 1, "Dynamite:", self.Player:GetCount( "dynamite" ) )
-	self:SetInfo( 1, "SENTs:", self.Player:GetCount( "sents" ) )
+	if isfunction( ply.GetCount ) then -- Prevent the scoreboard from entirely breaking in non-sandbox gamemodes
+		self:SetInfo( 1, "Props:", ply:GetCount( "props" ) )
+		self:SetInfo( 1, "Hoverballs:", ply:GetCount( "hoverballs" ) )
+		self:SetInfo( 1, "Thrusters:", ply:GetCount( "thrusters" ) )
+		self:SetInfo( 1, "Balloons:", ply:GetCount( "balloons" ) )
+		self:SetInfo( 1, "Buttons:", ply:GetCount( "buttons" ) )
+		self:SetInfo( 1, "Dynamite:", ply:GetCount( "dynamite" ) )
+		self:SetInfo( 1, "SENTs:", ply:GetCount( "sents" ) )
 
-	self:SetInfo( 2, "Ragdolls:", self.Player:GetCount( "ragdolls" ) )
-	self:SetInfo( 2, "Effects:", self.Player:GetCount( "effects" ) )
-	self:SetInfo( 2, "Vehicles:", self.Player:GetCount( "vehicles" ) )
-	self:SetInfo( 2, "NPCs:", self.Player:GetCount( "npcs" ) )
-	self:SetInfo( 2, "Emitters:", self.Player:GetCount( "emitters" ) )
-	self:SetInfo( 2, "Lamps:", self.Player:GetCount( "lamps" ) )
-	self:SetInfo( 2, "Spawners:", self.Player:GetCount( "spawners" ) )
+		self:SetInfo( 2, "Ragdolls:", ply:GetCount( "ragdolls" ) )
+		self:SetInfo( 2, "Effects:", ply:GetCount( "effects" ) )
+		self:SetInfo( 2, "Vehicles:", ply:GetCount( "vehicles" ) )
+		self:SetInfo( 2, "NPCs:", ply:GetCount( "npcs" ) )
+		self:SetInfo( 2, "Emitters:", ply:GetCount( "emitters" ) )
+		self:SetInfo( 2, "Lamps:", ply:GetCount( "lamps" ) )
+		self:SetInfo( 2, "Spawners:", ply:GetCount( "spawners" ) )
+	end
 
 	self:InvalidateLayout()
 end
