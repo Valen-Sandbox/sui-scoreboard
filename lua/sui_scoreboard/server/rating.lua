@@ -60,14 +60,14 @@ Scoreboard.UpdatePlayerRatings = function( ply )
 		return false
 	end
 
-	local result = sql.Query( "SELECT rating, count(*) as cnt FROM sui_ratings WHERE target = "..ply:UniqueID().." GROUP BY rating " )
+	local result = sql.Query( "SELECT rating, count(*) as cnt FROM sui_ratings WHERE target = " .. ply:UniqueID() .. " GROUP BY rating " )
 
 	if not result then
 		return false
 	end
 
-	for id, row in pairs( result ) do
-		ply:SetNetworkedInt( "SuiRating."..ValidRatings[ tonumber( row['rating'] ) ], row['cnt'] )
+	for _, row in pairs( result ) do
+		ply:SetNWInt( "SuiRating." .. ValidRatings[ tonumber( row["rating"] ) ], row["cnt"] )
 	end
 end
 
@@ -76,7 +76,7 @@ end
 -- @param string command
 -- @param array arguments
 -- @return boolean
-local function CCRateUser( player, command, arguments )
+local function CCRateUser( player, _, arguments )
 	local Rater 	= player
 	local Target 	= Entity( tonumber( arguments[1] ) )
 	local Rating	= arguments[2]
@@ -109,19 +109,19 @@ local function CCRateUser( player, command, arguments )
 	Target.RatingTimers = Target.RatingTimers or {}
 
 	if Target.RatingTimers[ RaterID ] and Target.RatingTimers[ RaterID ] > CurTime() - 60 then
-		Rater:ChatPrint( "Please wait before rating ".. Target:Nick() .." again.\n" );
+		Rater:ChatPrint( "Please wait before rating " .. Target:Nick() .. " again.\n" );
 		return false
 	end
 
 	Target.RatingTimers[ RaterID ] = CurTime()
 
 	-- Tell the target that they have been rated (but don't tell them who to add to the fun and bitching)
-	Target:ChatPrint( Rater:Nick() .. " Gave you a '" .. GetRatingName(RatingID) .. "' rating.\n" );
+	Target:ChatPrint( Rater:Nick() .. " gave you a '" .. GetRatingName(RatingID) .. "' rating.\n" );
 
 	-- Let the rater know that their vote was counted
-	Rater:ChatPrint( "Gave ".. Target:Nick() .." a '" .. GetRatingName(RatingID) .. "' rating.\n" );
+	Rater:ChatPrint( "Gave " .. Target:Nick() .. " a '" .. GetRatingName(RatingID) .. "' rating.\n" );
 
-	sql.Query( "INSERT INTO sui_ratings ( target, rater, rating ) VALUES ( "..TargetID..", "..RaterID..", "..RatingID.." )" )
+	sql.Query( "INSERT INTO sui_ratings ( target, rater, rating ) VALUES ( " .. TargetID .. ", " .. RaterID .. ", " .. RatingID .. " )" )
 
 	-- We changed something so update the networked vars
 	Scoreboard.UpdatePlayerRatings ( Target )
