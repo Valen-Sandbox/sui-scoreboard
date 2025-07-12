@@ -20,6 +20,7 @@ include( "player_infocard.lua" )
 
 local texGradient = surface.GetTextureID( "gui/center_gradient" )
 local nameColor = Color(0, 0, 0, 255)
+local innerInfoboxColor = Color(225, 225, 225, 150)
 
 local PANEL = {}
 
@@ -68,12 +69,14 @@ function PANEL:Paint(w,h)
 	end
 
 	if self.Open or self.Size ~= self.TargetSize then
-		draw.RoundedBox( 4, 18, 16, w - 36, h - 16, color )
-		draw.RoundedBox( 4, 20, 16, w - 40, h - 16 - 2, Color( 225, 225, 225, 150 ) )
+		local playerRowOffset = 22
+
+		draw.RoundedBox( 4, 18, 16 + playerRowOffset, w - 36, h - 16 - playerRowOffset, color )
+		draw.RoundedBox( 4, 20, 16 + playerRowOffset, w - 40, h - 16 - 2 - playerRowOffset, innerInfoboxColor )
 
 		surface.SetTexture( texGradient )
 		surface.SetDrawColor( 255, 255, 255, 100 )
-		surface.DrawTexturedRect( 20, 16, w - 40, h - 16 - 2 )
+		surface.DrawTexturedRect( 20, 16 + playerRowOffset, w - 40, h - 16 - 2 )
 	end
 
 	draw.RoundedBox( 4, 18, 0, w - 36, 38, color )
@@ -95,8 +98,8 @@ end
 
 --- CheckRating
 function PANEL:CheckRating( name, count )
-	if self.Player:GetNetworkedInt( "Rating."..name, 0 ) > count then
-		count = self.Player:GetNetworkedInt( "Rating."..name, 0 )
+	if self.Player:GetNWInt( "Rating." .. name, 0 ) > count then
+		count = self.Player:GetNWInt( "Rating." .. name, 0 )
 	end
 
 	return count
